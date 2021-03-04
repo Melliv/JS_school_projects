@@ -11,7 +11,7 @@
     "url": "git@gitlab.cs.ttu.ee:vimadi/icd0006-2020s.git"
   },
   "keywords": [],
-  "author": "Andres Käver",
+  "author": "Villem Madisson",
   "license": "ISC",
   "devDependencies": {
     "html-webpack-plugin": "^5.0.0",
