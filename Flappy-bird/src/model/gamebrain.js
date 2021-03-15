@@ -1,40 +1,42 @@
 import bird from './bird.js';
+import settings from './settings.js';
 
 class GameScore {
-    constructor() {
-        this.name = '';
-        this.score = 0;
+    constructor(name, score) {
+        this.name = name;
+        this.score = score;
     }
 }
 
-export const SKY_CELL = 0;
-export const OBSTACLE_CELL = -1;
-export const BIRD_CELL = 2;
-
-export const OBSTACLE_STEP = 60
-export const OBSTACLE_WIDTH = 10
-
 export default class GameBrain {
 
-
-    constructor(rowCount = 100, colCount = 100) {
-        this.step = Math.floor(OBSTACLE_STEP / 2);
-        this.obsWidthCou = 0;
-        this.obstacleHolder = [];
-        this.rowCount = rowCount;
-        this.colCount = colCount;
-
-        this.scoreBoard = []; // of GameScore
-        this.board = [];
-        this.bird = new bird(rowCount, colCount);
+    constructor(rowCount, colCount) {
+        this.set = new settings();
+        this.rowCount = rowCount ?? this.set.ROW_COUNT;
+        this.colCount = colCount ?? this.set.COL_COUNT;
+        this.scoreBoard = [];
 
         this.intializeBoard();
+    }
+
+    intializeBoard() {
+        this.bird = new bird(this.rowCount, this.colCount, this.set);
+        this.step = 0;
+        this.obsWidthCou = 0;
+        this.shiftCou = 0;
+        this.score = 0;
+        this.obstacleHolder = [];
+        this.board = [];
+
+        for (let index = 0; index < this.colCount; index++) {
+            this.board.push(this.createClearCol());
+        }
     }
 
     createClearCol() {
         let res = [];
         for (let index = 0; index < this.rowCount; index++) {
-            res.push(SKY_CELL);
+            res.push(this.set.BLUE);
         }
         return res;
     }
@@ -43,97 +45,82 @@ export default class GameBrain {
         let res = [];
         let gate = this.randomizeGate();
 
-        //console.log(gate[0]);
         for (let index = 0; index < this.rowCount; index++) {
             if (gate[0] <= index && index <= gate[1]) {
-                res.push(SKY_CELL);
+                res.push(this.set.BLUE);
             } else {
-                res.push(OBSTACLE_CELL);
+                res.push(this.set.GREEN);
             }
         }
         return res;
     }
 
     randomizeGate() {
-        const GATE_SIZE = this.rowCount / 4;
-        let gateStartPoint = Math.floor(Math.random() * (this.rowCount - GATE_SIZE - 2));
-        return [gateStartPoint, gateStartPoint + GATE_SIZE];
+        const GATE_SIZE_HEIGHT = this.rowCount * this.set.GATE_SIZE;
+        let gateStartPoint = Math.floor(Math.random() * (this.rowCount - GATE_SIZE_HEIGHT - 2));
+        return [gateStartPoint, gateStartPoint + GATE_SIZE_HEIGHT];
     }
 
-    intializeBoard() {
-        for (let index = 0; index < this.colCount; index++) {
-            this.board.push(this.createClearCol());
-        }
-        this.intializeBird();
-    }
-
-    intializeBird() {
-        let birdCellX = 0;
-        let birdCellY = 0;
-        let birdLoc = this.getBirdLocation();
-        //console.log(birdLoc);
-        //console.log("xd");
-        for (let x = birdLoc[0]; x < birdLoc[1]; x++) {
-            for (let y = birdLoc[2]; y < birdLoc[3]; y++) {
-                this.board[x][y] = this.bird.getBirdCell(birdCellX, birdCellY);
-                //console.log(birdCellX);
-                //console.log(this.bird.getBirdCell(birdCellX, birdCellY));
-                birdCellY++;
-            }
-            birdCellX++;
-            birdCellY = 0;
-        }
+    insertScore(name) {
+        this.scoreBoard.push(new GameScore(name, this.score));
     }
 
     shiftBoard() {
         this.shiftBird();
-        //console.log(this.obstacleHolder);
-        if (this.step === OBSTACLE_STEP) {
+        this.calculateScore();
+        if (this.step === 0) {
             this.obstacleHolder = this.createObstacleCol();
             this.board.push(this.obstacleHolder);
             this.obsWidthCou = 0;
-            this.step = 0;
-        } else if (this.step === 0 && this.obsWidthCou < OBSTACLE_WIDTH) {
+            this.step = this.set.OBSTACLE_STEP;
+        } else if (this.step === this.set.OBSTACLE_STEP && this.obsWidthCou < this.set.OBSTACLE_WIDTH) {
             this.board.push(this.obstacleHolder);
             this.obsWidthCou++;
         } else {
-            //console.log("test");
             this.board.push(this.createClearCol());
-            this.step++;
+            this.step--;
         }
         
-        this.intializeBird();
+    }
+
+    calculateScore() {
+        this.shiftCou++;
+        if (this.score === 0 && this.shiftCou > this.colCount * (1-this.set.BIRD_START_POINT_X )
+                            || this.score > 0 && this.shiftCou > this.set.OBSTACLE_STEP + this.set.OBSTACLE_WIDTH) {
+            this.shiftCou = 0;
+            this.score++;
+        }
     }
 
     shiftBird() {
-        const birdLoc = this.getBirdLocation();
-        let x;
-        let y;
-        for (x = birdLoc[0]; x < birdLoc[1]; x++) {
-            for (y = birdLoc[2]; y < birdLoc[3]; y++) {
-                this.board[x][y] = SKY_CELL;
-            }
-        }
         this.bird.moveBird();
         this.board.shift();
-        //console.log(birdLoc[0]);
-        //console.log(birdLoc[1]);
-        for (x = birdLoc[0]; x < birdLoc[1]; x++) {
-            //console.log("elajas");
-            for (y = birdLoc[2]; y < birdLoc[3]; y++) {
-                this.board[x][y] = BIRD_CELL;
-                //console.log("test");
-            }
-        }
-
     }
 
+    birdCrash() {
+        const BIRD_LOCATION = this.getBirdLocation();
+        for (let yCord = BIRD_LOCATION[2]; yCord < BIRD_LOCATION[3]; yCord++) {
+            if (this.board[BIRD_LOCATION[1] - 1][yCord] === this.set.GREEN) {
+                return true;
+            }
+        }
+        for (let xCord = BIRD_LOCATION[0]; xCord < BIRD_LOCATION[1]; xCord++) {
+            if (this.board[xCord][BIRD_LOCATION[2]] === this.set.GREEN || this.board[xCord][BIRD_LOCATION[3]] === this.set.GREEN) {
+                return true;
+            }
+        }
+        return (BIRD_LOCATION[2] <= 0 || BIRD_LOCATION[3] === this.colCount);
+    }
+
+    birdJump() {
+        this.bird.jump();
+    }
+
+    getSettings() {return this.set;}
+    getBirdCell(x, y) {return this.bird.getBirdCell(x, y);}
     getBirdLocation() {return this.bird.getLocation();}
     getGameBoard() {return this.board;}
     getGameBoardLastCol() {return this.board[this.board.length - 1];}
-    getBird() {return this.bird;}
-
-    getSky() {return SKY_CELL}
-    getObstacle() {return OBSTACLE_CELL}
-    getBirdCell() {return BIRD_CELL}
+    getScore() {return this.score;}
+    getScoreBoard() {return this.scoreBoard;}
 }

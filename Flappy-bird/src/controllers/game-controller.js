@@ -1,27 +1,31 @@
 export default class GameController {
 
-    constructor(viewContainer) {
+    constructor(viewContainer, brain) {
         this.viewContainer = viewContainer;
-        this.rowHeight;
-        this.colWidth;
-    }
-
-    getBirdLocation() {
-        return this.model.getBirdLocation();
-    }
-
-    run(brain) {
         this.model = brain;
-        this.isRunning = true;
-        // draw the initial game board, start the game
-        this.viewContainer.innerHTML = '';
-        //console.log(this);
+        this.set = this.model.getSettings();
+    }
 
-        this.viewContainer.append(this.getBoardHtml());
-        
+    run() {
+        this.displayBoard();
+        this.birdLocation = this.model.getBirdLocation();
+        this.drawBird();
         this.animateGame();
     }
+    
+    startModel() {
+        this.model.intializeBoard();
+    }
 
+    displayBoard() {
+        this.isRunning = true;
+        this.viewContainer.innerHTML = '';
+        this.viewContainer.append(this.getBoardHtml());
+    }
+
+    birdJump() {
+        this.model.birdJump();
+    }
 
     stop(){
         this.isRunning = false;
@@ -31,95 +35,65 @@ export default class GameController {
     animateGame() {
         this.timer = setTimeout(() => { 
             this.shiftBoard();
+            this.showScore();
             this.animateGame();
-        } , 30);     
+        } , this.set.RENDER_SPEED);     
     }
 
     shiftBoard() {
-        //this.resizeUi();
         this.model.shiftBoard();
         this.removeFirstCol();
-        let col = this.getCol(this.model.getGameBoardLastCol());
-        //console.log(col);
-        this.viewContainer.firstElementChild.append(col);
-        this.shiftBird();
-
         
+        let col = this.getCol(this.model.getGameBoardLastCol());
+        this.viewContainer.firstElementChild.append(col);
+        
+        if (this.model.birdCrash()) {
+            this.stop();
+            let name = prompt("Insert your name");
+            if (name != null) {
+                this.model.insertScore(name);
+            }
+            this.startModel();
+            this.displayBoard();
+        } else {
+            this.shiftBird();
+        }
     }
 
     shiftBird() {
+        this.eraseBird();
+        this.drawBird();
+    }
+
+    eraseBird() {
         let col = this.viewContainer.firstElementChild.childNodes;
-        let cell;
-        const BIRD_LOCATION = this.getBirdLocation();
-        for (let colInd = BIRD_LOCATION[0] - 1; colInd < BIRD_LOCATION[1] - 1; colInd++) {
-            for (let rowInd = BIRD_LOCATION[2]; rowInd < BIRD_LOCATION[3]; rowInd++) {
-                col[colInd].childNodes[rowInd].style.backgroundColor = this.getCellColor(this.model.getSky());
+        for (let colInd = this.birdLocation[0] - 1; colInd < this.birdLocation[1] - 1; colInd++) {
+            for (let rowInd = this.birdLocation[2]; rowInd < this.birdLocation[3]; rowInd++) {
+                col[colInd].childNodes[rowInd].style.backgroundColor = this.getCellColor(this.set.BLUE);
             }
         }
-        //console.log(this.X_START);
-        //console.log(this.X_END);
-        for (let colInd = BIRD_LOCATION[0]; colInd < BIRD_LOCATION[1]; colInd++) {
-            col = this.viewContainer.firstElementChild.childNodes[colInd].childNodes;
-            for (let rowInd = BIRD_LOCATION[2]; rowInd < BIRD_LOCATION[3]; rowInd++) {
-                cell = this.model.getGameBoard()[colInd][rowInd];
-                col[rowInd].style.backgroundColor = this.getCellColor(cell);
+    }
+
+    drawBird() {
+        this.birdLocation = this.model.getBirdLocation();
+        let xCounter = 0;
+        for (let colInd = this.birdLocation[0]; colInd < this.birdLocation[1]; colInd++) {
+            let col = this.viewContainer.firstElementChild.childNodes[colInd].childNodes;
+            let yCounter = 0;
+            for (let rowInd = this.birdLocation[2]; rowInd < this.birdLocation[3]; rowInd++) {
+                col[rowInd].style.backgroundColor = this.getCellColor(this.model.getBirdCell(xCounter, yCounter));
+                yCounter++;
             }
+            xCounter++;
         }
+    }
+
+    showScore() {
+        document.getElementById("scoreElem").textContent = this.model.getScore();
     }
 
     removeFirstCol() {
-        this.viewContainer
-            .firstElementChild
-            .firstElementChild
-            .remove();
-    }
-
-    getCol(colData, colIndex) {
-        let colElem = document.createElement('div');
-        //colElem.id = `id-col-${colIndex}`
-
-        colElem.style.minWidth = this.colWidth + 'px';
-        colElem.style.maxWidth = this.colWidth + 'px';
-        colElem.style.display = 'inline-block';
-        let rowIndex = 0;
-
-        colData.forEach(rowData => {
-            let rowElem = this.getCell(rowData, colIndex, rowIndex);
-            colElem.append(rowElem);
-
-        });
-
-        return colElem;
-    }
-
-    getCell(rowData, colIndex, rowIndex) {
-        let rowElem = document.createElement('div');
-        //rowElem.id = `id-col-${colIndex}-row-${rowIndex}`
-
-        rowElem.style.backgroundColor = this.getCellColor(rowData);
-        rowElem.style.minWidth = this.colWidth + 'px';
-        rowElem.style.minHeight = this.rowHeight + 'px';
-
-        return rowElem;
-    }
-
-    getCellColor(rowData) {
-        let color = '#000'
-        if (rowData === this.model.getSky()) {
-            color = '#0099ff';
-        } else if (rowData === this.model.getObstacle()) {
-            color = '#006600';
-        } else if (rowData === this.model.getBirdCell()) {
-            color = '#ffff00';
-        }
-        return color;
-    }
-
-    resizeUi(){
-        if (this.isRunning){
-            this.viewContainer.innerHTML = '';
-            this.viewContainer.append(this.getBoardHtml(this.model));
-        }
+        this.viewContainer.firstElementChild.firstElementChild.remove();
     }
 
     getBoardHtml() {
@@ -127,11 +101,8 @@ export default class GameController {
         content.id = "gameboard";
         this.calculateBlockSize();
 
-        let colIndex = 0;
         this.model.getGameBoard().forEach(colData => {
-            let colElem = this.getCol(colData, colIndex);
-            content.append(colElem);
-            colIndex++;
+            content.append(this.getCol(colData));
         });
 
         return content;
@@ -140,5 +111,55 @@ export default class GameController {
     calculateBlockSize() {
         this.rowHeight = (window.innerHeight- document.getElementById("control").clientHeight) / this.model.rowCount;
         this.colWidth = (window.innerWidth - 17) / this.model.colCount;
+    }
+
+    getCol(colData) {
+        let colElem = document.createElement('div');
+
+        colElem.style.minWidth = this.colWidth + 'px';
+        colElem.style.maxWidth = this.colWidth + 'px';
+        colElem.style.display = 'inline-block';
+
+        colData.forEach(rowData => {
+            colElem.append(this.getCell(rowData));
+        });
+
+        return colElem;
+    }
+
+    getCell(rowData) {
+        let rowElem = document.createElement('div');
+        rowElem.style.backgroundColor = this.getCellColor(rowData);
+        rowElem.style.minWidth = this.colWidth + 'px';
+        rowElem.style.minHeight = this.rowHeight + 'px';
+
+        return rowElem;
+    }
+
+    getCellColor(rowData) {
+        switch(rowData) {
+            case this.set.BLUE:
+                return '#0099ff';
+            case this.set.GREEN:
+                return '#006600';
+            case this.set.YELLOW:
+                return '#ffff00';
+            case this.set.ORANGE:
+                return '#f5b342';
+            case this.set.RED:
+                return '#f54242';
+            case this.set.WHITE:
+                return '#ffffff';
+            case this.set.BLACK:
+                return '#000000';
+            default:
+                return "#111111"
+        };
+    }
+
+    resizeUi(){
+        if (this.isRunning){
+            this.displayBoard();
+        }
     }
 }
