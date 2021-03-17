@@ -1,38 +1,50 @@
+import {GameBrain} from '../model/gamebrain.ts';
+import settings from '../model/settings.ts';
+
 export default class GameController {
 
-    constructor(viewContainer, brain) {
+    private viewContainer: Element;
+    private model: GameBrain;
+    private set: settings;
+    private birdLocation: Array<number> = [];
+    private isRunning: boolean = false;
+    private timer: any = null;
+    private rowHeight: number = 0;
+    private colWidth: number = 0;
+
+    constructor(viewContainer: Element, model: GameBrain) {
         this.viewContainer = viewContainer;
-        this.model = brain;
-        this.set = this.model.getSettings();
+        this.model = model;
+        this.set = model.getSettings();
     }
 
-    run() {
+    run(): void {
         this.displayBoard();
         this.birdLocation = this.model.getBirdLocation();
         this.drawBird();
         this.animateGame();
     }
     
-    startModel() {
-        this.model.intializeBoard();
+    startModel(): void {
+        this.model.resetGame();
     }
 
-    displayBoard() {
+    displayBoard(): void  {
         this.isRunning = true;
         this.viewContainer.innerHTML = '';
         this.viewContainer.append(this.getBoardHtml());
     }
 
-    birdJump() {
+    birdJump(): void  {
         this.model.birdJump();
     }
 
-    stop(){
+    stop(): void {
         this.isRunning = false;
         clearTimeout(this.timer);
     }
 
-    animateGame() {
+    animateGame(): void  {
         this.timer = setTimeout(() => { 
             this.shiftBoard();
             this.showScore();
@@ -40,12 +52,12 @@ export default class GameController {
         } , this.set.RENDER_SPEED);     
     }
 
-    shiftBoard() {
+    shiftBoard(): void  {
         this.model.shiftBoard();
         this.removeFirstCol();
         
         let col = this.getCol(this.model.getGameBoardLastCol());
-        this.viewContainer.firstElementChild.append(col);
+        this.viewContainer.firstElementChild!.append(col);
         
         if (this.model.birdCrash()) {
             let name = prompt("Insert your name");
@@ -59,60 +71,62 @@ export default class GameController {
         }
     }
 
-    shiftBird() {
+    shiftBird(): void  {
         this.eraseBird();
         this.drawBird();
     }
 
-    eraseBird() {
-        let col = this.viewContainer.firstElementChild.childNodes;
+    eraseBird(): void  {
+        let col = this.viewContainer.firstElementChild!.childNodes;
         for (let colInd = this.birdLocation[0] - 1; colInd < this.birdLocation[1] - 1; colInd++) {
             for (let rowInd = this.birdLocation[2]; rowInd < this.birdLocation[3]; rowInd++) {
-                col[colInd].childNodes[rowInd].style.backgroundColor = this.getCellColor(this.set.BLUE);
+                let elem: HTMLElement = <HTMLElement>col[colInd].childNodes[rowInd];
+                elem.style.backgroundColor = this.getCellColor(this.set.BLUE);
             }
         }
     }
 
-    drawBird() {
+    drawBird(): void  {
         this.birdLocation = this.model.getBirdLocation();
         let xCounter = 0;
-        let col = this.viewContainer.firstElementChild.childNodes;
+        let col = this.viewContainer.firstElementChild!.childNodes;
         for (let colInd = this.birdLocation[0]; colInd < this.birdLocation[1]; colInd++) {
             let yCounter = 0;
             for (let rowInd = this.birdLocation[2]; rowInd < this.birdLocation[3]; rowInd++) {
-                col[colInd].childNodes[rowInd].style.backgroundColor = this.getCellColor(this.model.getBirdCell(xCounter, yCounter));
+                let elem: HTMLElement = <HTMLElement>col[colInd].childNodes[rowInd];
+                elem.style.backgroundColor = this.getCellColor(this.model.getBirdCell(xCounter, yCounter));
                 yCounter++;
             }
             xCounter++;
         }
     }
 
-    showScore() {
-        document.getElementById("scoreElem").textContent = this.model.getScore();
+    showScore(): void  {
+        document.getElementById("scoreElem")!.textContent = this.model.getScore().toString();
     }
 
-    removeFirstCol() {
-        this.viewContainer.firstElementChild.firstElementChild.remove();
+    removeFirstCol(): void  {
+        this.viewContainer.firstElementChild!.firstElementChild!.remove();
     }
 
-    getBoardHtml() {
+    getBoardHtml(): Element  {
         let content = document.createElement('div');
         content.id = "gameboard";
         this.calculateBlockSize();
 
-        this.model.getGameBoard().forEach(colData => {
+        this.model.getGameBoard().forEach((colData: Array<number>) => {
             content.append(this.getCol(colData));
         });
 
         return content;
     }
 
-    calculateBlockSize() {
-        this.rowHeight = (window.innerHeight - document.getElementById("control").clientHeight) / this.model.rowCount;
-        this.colWidth = (window.innerWidth - 17) / this.model.colCount;
+    calculateBlockSize(): void  {
+        this.rowHeight = (window.innerHeight - document.getElementById("control")!.clientHeight - 3) / this.model.getRowCount();
+        this.colWidth = window.innerWidth / this.model.getColCount();
     }
 
-    getCol(colData) {
+    getCol(colData: Array<number>): Element {
         let colElem = document.createElement('div');
 
         colElem.style.minWidth = this.colWidth + 'px';
@@ -126,7 +140,7 @@ export default class GameController {
         return colElem;
     }
 
-    getCell(rowData) {
+    getCell(rowData: number): Element {
         let rowElem = document.createElement('div');
         rowElem.style.backgroundColor = this.getCellColor(rowData);
         rowElem.style.minWidth = this.colWidth + 'px';
@@ -135,7 +149,7 @@ export default class GameController {
         return rowElem;
     }
 
-    getCellColor(rowData) {
+    getCellColor(rowData: number): string {
         switch(rowData) {
             case this.set.BLUE:
                 return '#0099ff';
@@ -156,7 +170,7 @@ export default class GameController {
         };
     }
 
-    resizeUi(){
+    resizeUi(): void {
         if (this.isRunning){
             this.displayBoard();
         }

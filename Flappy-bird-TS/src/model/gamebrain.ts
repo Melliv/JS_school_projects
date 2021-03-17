@@ -1,26 +1,48 @@
-import bird from './bird.js';
-import settings from './settings.js';
+import bird from './bird.ts';
+import settings from './settings.ts';
 
-class GameScore {
-    constructor(name, score) {
+export class GameScore {
+
+    name: string;
+    score: number;
+
+    constructor(name: string, score: number) {
         this.name = name;
         this.score = score;
     }
 }
 
-export default class GameBrain {
+export class GameBrain {
 
-    constructor(rowCount, colCount) {
+    private set: settings;
+    private rowCount: number;
+    private colCount: number;
+    private scoreBoard: Array<GameScore> = [];
+
+    private bird: bird = null!;
+    private step: number = 0;
+    private obsWidthCou: number = 0;
+    private shiftCou: number = 0;
+    private score: number = 0;
+    private obstacleHolder: Array<number> = [];
+    private board: Array<Array<number>> = [];
+
+    constructor(rowCount: number = 0, colCount: number = 0) {
         this.set = new settings();
-        this.rowCount = rowCount ?? this.set.ROW_COUNT;
-        this.colCount = colCount ?? this.set.COL_COUNT;
-        this.scoreBoard = [];
+        this.rowCount = (rowCount === 0) ? this.set.ROW_COUNT : rowCount;
+        this.colCount = (colCount === 0) ? this.set.COL_COUNT : colCount;
 
         this.intializeBoard();
     }
 
-    intializeBoard() {
+    intializeBoard(): void {
         this.bird = new bird(this.rowCount, this.colCount, this.set);
+        for (let index = 0; index < this.colCount; index++) {
+            this.board.push(this.createClearCol());
+        }
+    }
+
+    resetGame(): void {
         this.step = 0;
         this.obsWidthCou = 0;
         this.shiftCou = 0;
@@ -28,12 +50,10 @@ export default class GameBrain {
         this.obstacleHolder = [];
         this.board = [];
 
-        for (let index = 0; index < this.colCount; index++) {
-            this.board.push(this.createClearCol());
-        }
+        this.intializeBoard();
     }
 
-    createClearCol() {
+    createClearCol(): Array<number> {
         let res = [];
         for (let index = 0; index < this.rowCount; index++) {
             res.push(this.set.BLUE);
@@ -41,7 +61,7 @@ export default class GameBrain {
         return res;
     }
 
-    createObstacleCol() {
+    createObstacleCol(): Array<number> {
         let res = [];
         let gate = this.randomizeGate();
 
@@ -55,17 +75,17 @@ export default class GameBrain {
         return res;
     }
 
-    randomizeGate() {
+    randomizeGate(): Array<number> {
         const GATE_SIZE_HEIGHT = this.rowCount * this.set.GATE_SIZE;
         let gateStartPoint = Math.floor(Math.random() * (this.rowCount - GATE_SIZE_HEIGHT - 2));
         return [gateStartPoint, gateStartPoint + GATE_SIZE_HEIGHT];
     }
 
-    insertScore(name) {
+    insertScore(name: string): void {
         this.scoreBoard.push(new GameScore(name, this.score));
     }
 
-    shiftBoard() {
+    shiftBoard(): void {
         this.bird.moveBird();
         this.board.shift();
         this.calculateScore();
@@ -84,7 +104,7 @@ export default class GameBrain {
         
     }
 
-    calculateScore() {
+    calculateScore(): void {
         this.shiftCou++;
         if (this.score === 0 && this.shiftCou > this.colCount * (1-this.set.BIRD_START_POINT_X )
                             || this.score > 0 && this.shiftCou > this.set.OBSTACLE_STEP + this.set.OBSTACLE_WIDTH) {
@@ -93,7 +113,7 @@ export default class GameBrain {
         }
     }
 
-    birdCrash() {
+    birdCrash(): boolean {
         const BIRD_LOCATION = this.getBirdLocation();
         for (let yCord = BIRD_LOCATION[2]; yCord < BIRD_LOCATION[3]; yCord++) {
             if (this.board[BIRD_LOCATION[1] - 1][yCord] === this.set.GREEN) {
@@ -108,15 +128,17 @@ export default class GameBrain {
         return (BIRD_LOCATION[2] <= 0 || BIRD_LOCATION[3] === this.colCount);
     }
 
-    birdJump() {
+    birdJump(): void {
         this.bird.jump();
     }
 
-    getSettings() {return this.set;}
-    getBirdCell(x, y) {return this.bird.getBirdCell(x, y);}
-    getBirdLocation() {return this.bird.getLocation();}
-    getGameBoard() {return this.board;}
-    getGameBoardLastCol() {return this.board[this.board.length - 1];}
-    getScore() {return this.score;}
-    getScoreBoard() {return this.scoreBoard;}
+    getRowCount(): number {return this.rowCount;}
+    getColCount(): number {return this.colCount;}
+    getSettings(): settings {return this.set;}
+    getBirdCell(x: number, y: number): number {return this.bird.getBirdCell(x, y);}
+    getBirdLocation(): Array<number> {return this.bird.getLocation();}
+    getGameBoard(): Array<Array<number>> {return this.board;}
+    getGameBoardLastCol(): Array<number> {return this.board[this.board.length - 1];}
+    getScore(): number {return this.score;}
+    getScoreBoard(): Array<GameScore> {return this.scoreBoard;}
 }
