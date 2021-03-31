@@ -1,4 +1,4 @@
-export default function mainView(eventHandler: any) {
+export default function mainView(eventHandler: Function) {
     let control = document.createElement('div');
     control.style.textAlign = "center";
     control.style.background = "#006666";

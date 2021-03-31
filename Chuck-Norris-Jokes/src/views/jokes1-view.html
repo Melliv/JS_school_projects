@@ -1,0 +1,28 @@
+<h1>Jokes ${pageNum}</h1>
+
+<h3>${jokesInfo.category}</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Repetition</th>
+            <th>Jokes</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr repeat.for="joke of jokesInfo.jokes">
+            <td>
+                ${joke.index}
+            </td>
+            <td>
+                ${joke.count}
+            </td>
+            <td>
+                ${joke.value}
+            </td>
+        </tr>
+
+    </tbody>
+</table>

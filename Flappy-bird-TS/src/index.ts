@@ -1,10 +1,10 @@
-import mainView from './views/mainview.ts';
-import controlView from './views/controlview.ts';
-import gameView from './views/gameview.ts';
+import mainView from './views/mainview';
+import controlView from './views/controlview';
+import gameView from './views/gameview';
 
-import {GameBrain} from './model/gamebrain.ts';
-import GameController from './controllers/game-controller.ts';
-import StatisticsController from './controllers/statistics-controller.ts';
+import {GameBrain} from './model/gamebrain';
+import GameController from './controllers/game-controller';
+import StatisticsController from './controllers/statistics-controller';
 
 
 let brain = new GameBrain();

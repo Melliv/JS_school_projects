@@ -1,5 +1,5 @@
-import {GameBrain} from '../model/gamebrain.ts';
-import settings from '../model/settings.ts';
+import {GameBrain} from '../model/gamebrain';
+import settings from '../model/settings';
 
 export default class GameController {
 

@@ -1,4 +1,4 @@
-import {GameBrain, GameScore} from '../model/gamebrain.ts';
+import {GameBrain, GameScore} from '../model/gamebrain';
 
 export default class StatisticsController {
 
