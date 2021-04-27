@@ -1,0 +1,56 @@
+<import from="views\home\home-index.html" />
+<import from="views\identity\identity-login" />
+
+<import from="views\blood-transfusion\blood-transfusion-index" />
+
+<import from="app-login" />
+<import from="app-header" />
+<import from="app-sidebar.html" />
+<import from="app-footer.html" />
+
+
+<!--<div show.bind="state.token == null" >
+    <h1>token null</h1>
+</div>
+
+<div show.bind="state.token != null" >
+    <h1>token not null</h1>
+</div>-->
+
+<div show.bind="state.token == null">
+    <app-login></app-login>
+</div>
+
+<div show.bind="state.token != null" >
+    <body id="page-top" show.bind="state.token != null">
+
+        <div id="wrapper">
+
+            <app-sidebar></app-sidebar>
+
+            <div id="content-wrapper" class="d-flex flex-column">
+
+
+                <div class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <app-header></app-header>
+                </div>
+
+                <!-- Main Content -->
+                <div class="container-fluid">
+                    <div id="content">
+                        <div class="container">
+                            <main role="main" class="pb-3">
+                                <au-viewport default="home-index" name="my-app"></au-viewport>
+                            </main>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <app-footer></app-footer>
+
+    </body>
+</div>

@@ -54,7 +54,9 @@ export class JokesState {
     async addJokes(pageNum: number, jokesCount: number): Promise<void> {
         this.jokesInfo
             .then(data => {return this.getJokes(data[pageNum].jokes, data[pageNum].category, jokesCount);})
-            .then(jokes => {this.jokesInfo[pageNum].jokes = jokes;});   
+            .then(jokes => {
+                console.log(jokes);
+                this.jokesInfo[pageNum].jokes = jokes;});   
 
         //this.jokesInfo.push(jokesInfo)
         //console.log(this.jokesInfo);

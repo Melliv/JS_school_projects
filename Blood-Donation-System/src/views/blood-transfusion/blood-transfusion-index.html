@@ -1,0 +1,39 @@
+<h1>Blood transfusions Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                id
+            </th>
+            <th>
+                ContactTypeValue
+            </th>
+            <th>
+                ContactCount
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr repeat.for="item of data">
+            <td>
+                ${item.id}
+            </td>
+            <td>
+                ${item.amount}
+            </td>
+            <td>
+                ${item.comments}
+            </td>
+            <!--<td>
+                <a load="/contact-types-detail(${item.id})">Details</a>
+                <template if.bind="state.token != null">
+                    | 
+                    <a load="/contact-types-edit(${item.id})">Edit</a> | 
+                    <a load="/contact-types-delte(${item.id})">Delete</a>
+                </template>
+            </td>-->
+        </tr>
+    </tbody>
+</table>

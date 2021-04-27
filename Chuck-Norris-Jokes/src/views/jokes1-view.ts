@@ -8,14 +8,16 @@ export class Jokes1View {
 
     private jokesInfo: IJokesInfo;
 
-    constructor(private jokesState: JokesState){        
+    constructor(private jokesState: JokesState){
     }
 
     
     async attached() {
-        this.jokesState.addJokes(this.pageNum - 1, 1)
+        console.log("wegerg");
+        this.jokesState.addJokes(this.pageNum - 1, 5)
             .then(() => {return this.jokesState.jokesInfo})
-            .then(data => {this.jokesInfo = data[this.pageNum - 1]});
+            .then(data => {
+                this.jokesInfo = data[this.pageNum - 1]});
     }
 
 }
