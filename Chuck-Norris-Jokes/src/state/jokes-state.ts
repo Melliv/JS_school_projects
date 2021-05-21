@@ -34,7 +34,6 @@ export class JokesState {
 
     async getJokes(existJokes: IJoke[], category: string, jokesCount: number): Promise<IJoke[]> {
         let jokes: IJoke[] = existJokes;
-        //console.log(jokes);
         for (let index = 0; index < jokesCount; index++) {
             this.jokesService.getJoke(category).then(joke => {
                 let orgJoke = jokes.find(j => j.id === joke.id);
@@ -47,19 +46,13 @@ export class JokesState {
                 }
             });
         }
-        //console.log(jokes);
         return jokes;
     }
 
     async addJokes(pageNum: number, jokesCount: number): Promise<void> {
         this.jokesInfo
             .then(data => {return this.getJokes(data[pageNum].jokes, data[pageNum].category, jokesCount);})
-            .then(jokes => {
-                console.log(jokes);
-                this.jokesInfo[pageNum].jokes = jokes;});   
-
-        //this.jokesInfo.push(jokesInfo)
-        //console.log(this.jokesInfo);
+            .then(jokes => {this.jokesInfo[pageNum].jokes = jokes;});   
     }
 
 }

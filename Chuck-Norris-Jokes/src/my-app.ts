@@ -8,10 +8,7 @@ export class MyApp {
 
 
   constructor(
-    private eventAggregator: EventAggregator,
-    private appState: AppState,
     private jokesState: JokesState,
-    private jokesService: JokesService
   ) {
     
   }

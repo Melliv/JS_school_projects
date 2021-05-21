@@ -19,29 +19,10 @@ export class TodoInput {
 
 
     addNewTodo() {
-        console.log('Add new todo: ' + this.description);
-
         this.eventAggregator.publish('new-todo', this.description);
-        
+    
         setTimeout(() => {
             this.description = '';
         }, 100);
     }
-
-    /*
-
-    // this is not nice.....
-    @bindable public addnewCallback: (decr: string) => void = null;
-
-
-    addNewTodo() {
-        console.log('Add new todo: ' + this.description);
-
-        this.addnewCallback(this.description);
-
-        setTimeout(() => {
-            this.description = '';
-        }, 100);
-    }
-    */
 }

@@ -1,5 +1,5 @@
 <template>
-        <h1>Blood donations</h1>
+    <h1>Blood donations</h1>
 
     <p>
         <router-link class="nav-link text-dark" to="/Blooddonate/Create">Create new</router-link>

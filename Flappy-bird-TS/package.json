@@ -4,7 +4,9 @@
   "description": "WebPack Skeleton for JS course. WebPack 5.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --open",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
     "typescript": "^4.2.3",
     "webpack": "^5.26.2",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
   }
 }

@@ -9,7 +9,6 @@ export class TodoView {
 
   private description = '';
 
-  private userName = "foobar";
 
   private subscriptions: IDisposable[] = [];
 
@@ -22,18 +21,11 @@ export class TodoView {
       this.eventAggregator.subscribe('new-todo', (descr: string) => this.addNewTodo(descr))
     );
 
-  
-
   }
 
   addNewTodo = (descr: string): void => {
     this.appState.addTodo({description: descr.trim(), done: false});
   }
-
-  //removeTodo = (index: number): void => {
-  //  console.log('Removing element at index: ' + index);
-  //  this.appState.removeTodo(index);
-  //}
 
   detached() {
     this.subscriptions.forEach(subscription => subscription.dispose());

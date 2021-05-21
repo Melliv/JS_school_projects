@@ -13,8 +13,7 @@ export class Jokes1View {
 
     
     async attached() {
-        console.log("wegerg");
-        this.jokesState.addJokes(this.pageNum - 1, 5)
+        this.jokesState.addJokes(this.pageNum - 1, 1)
             .then(() => {return this.jokesState.jokesInfo})
             .then(data => {
                 this.jokesInfo = data[this.pageNum - 1]});

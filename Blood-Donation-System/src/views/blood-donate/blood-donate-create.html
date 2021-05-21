@@ -1,0 +1,42 @@
+<h1>Create</h1>
+
+<h4>Blood donation</h4>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label">Donor</label>
+            <select class="form-control" value.bind="bloodDonate.donorId">
+                <option></option>
+                <option repeat.for="patient of patients" value="${patient.id}">
+                    ${ patient.fullName }
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Doctor</label>
+            <select class="form-control" value.bind="bloodDonate.doctorId">
+                <option></option>
+                <option repeat.for="doctor of doctors" value="${doctor.id}">
+                    ${ doctor.fullName }
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Blood test</label>
+            <select class="form-control" value.bind="bloodDonate.bloodTestId" >
+                <option></option>
+                <option repeat.for="bloodTest of bloodTests"value="${bloodTest.id}">
+                    ${ bloodTest.overviewData }
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Amount</label>
+            <input class="form-control" value.bind="bloodDonate.amount" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" click.delegate="create()">Create</button>
+        </div>
+    </div>
+</div>

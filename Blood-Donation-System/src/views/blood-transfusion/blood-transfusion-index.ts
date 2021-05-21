@@ -1,16 +1,16 @@
 import { BaseService } from '../../services/base-service';
 import { HttpClient } from "aurelia";
-import { IBloodTransfusion } from '../../domain/IBloodTransfusion';
+import { BloodTransfusion } from '../../domain/BloodTransfusion';
 import { AppState } from '../../state/app-state';
 
 export class BloodTransfusionIndex {
-    private service: BaseService<IBloodTransfusion> = 
-        new BaseService<IBloodTransfusion>("https://localhost:5051/api/v1/BloodTransfusion", 
+    private service: BaseService<BloodTransfusion> = 
+        new BaseService<BloodTransfusion>("https://localhost:5051/api/v1/BloodTransfusion", 
         this.httpClient,
         this.state.token);
 
     
-    private data: IBloodTransfusion[] = [];
+    private data: BloodTransfusion[] = [];
 
     constructor(protected httpClient: HttpClient, private state: AppState){
     }

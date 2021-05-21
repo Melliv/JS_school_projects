@@ -3,9 +3,10 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Blood transfusion</h4>
+    <h4>Blood test</h4>
     <hr />
-    <dl class="row">
+    <div v-if="bloodTest != null" >
+        <dl class="row">
         <dt class = "col-sm-2">
             Allowed
         </dt>
@@ -60,7 +61,9 @@
         <dd class = "col-sm-10">
             {{ bloodTest.updatedAt }}
         </dd>
-    </dl>
+        </dl>
+    </div>
+
 </div>
 <div>
     <router-link class="nav-link text-dark" to="/bloodtest/">to list</router-link>
@@ -82,63 +85,7 @@ import { BloodTest } from "@/domain/BloodTest";
 })
 export default class BloodTestDetails extends Vue {
     id!: string;
-    bloodTest: BloodTest = {
-        id: "00000000-0000-0000-0000-000000000000",
-        createdBy: "-",
-        createAt: "0001-01-01T00:00:00",
-        updateBy: "-",
-        updatedAt: "0001-01-01T00:00:00",
-        allowed: false,
-        commentsId: "00000000-0000-0000-0000-000000000000",
-        comments: "",
-        donorId: "",
-        donor: {
-            id: "00000000-0000-0000-0000-000000000000",
-            createdBy: "-",
-            createAt: "",
-            updateBy: "-",
-            updatedAt: "",
-            firstname: null,
-            lastname: null,
-            identificationCode: null,
-            commentsId: "00000000-0000-0000-0000-000000000000",
-            comments: null,
-            personTypeId: "00000000-0000-0000-0000-000000000000",
-            personType: null,
-            bloodGroupId: "00000000-0000-0000-0000-000000000000",
-            bloodGroup: null,
-            fullName: "",
-        },
-        doctorId: "",
-        doctor: {
-            id: "00000000-0000-0000-0000-000000000000",
-            createdBy: "-",
-            createAt: "",
-            updateBy: "-",
-            updatedAt: "",
-            firstname: null,
-            lastname: null,
-            identificationCode: null,
-            commentsId: "00000000-0000-0000-0000-000000000000",
-            comments: null,
-            personTypeId: "00000000-0000-0000-0000-000000000000",
-            personType: null,
-            bloodGroupId: "00000000-0000-0000-0000-000000000000",
-            bloodGroup: null,
-            fullName: "",
-        },
-        bloodGroupId: "00000000-0000-0000-0000-000000000000",
-        bloodGroup: {
-            id: "00000000-0000-0000-0000-000000000000",
-            createdBy: "-",
-            createAt: "",
-            updateBy: "-",
-            updatedAt: "",
-            bloodGroupValue: null
-        },
-        overviewData: ""
-    }
-
+    bloodTest: BloodTest | null = null
     mounted(): void {
         const service = new BaseService<BloodTest>(
             "https://localhost:5051/api/v1/BloodTest",

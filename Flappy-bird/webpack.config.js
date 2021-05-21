@@ -11,7 +11,15 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: "./src/index.html",
-            inject: "body"
+            inject: "body",
         })
-    ]
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+            }
+        ]
+    }
 }

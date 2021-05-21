@@ -108,8 +108,8 @@ export default class GameController {
     }
 
     calculateBlockSize() {
-        this.rowHeight = (window.innerHeight - document.getElementById("control").clientHeight) / this.model.rowCount;
-        this.colWidth = (window.innerWidth - 17) / this.model.colCount;
+        this.rowHeight = (window.innerHeight - document.getElementById("control").clientHeight - 4) / this.model.rowCount;
+        this.colWidth = window.innerWidth / this.model.colCount;
     }
 
     getCol(colData) {

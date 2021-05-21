@@ -1,0 +1,30 @@
+<h1>Blood donations</h1>
+
+<p>
+    <!-- <router-link class="nav-link text-dark" to="/Blooddonate/Create">Create new</router-link> -->
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Blood group</th>
+            <th>Amount</th>
+            <th>Donor</th>
+            <th>Doctor</th>
+            <th>Created at</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr repeat.for="item of data">
+            <td>${ item.bloodGroup.bloodGroupValue }</td>
+            <td>${ item.amount }</td>
+            <td>${ item.donor.fullName }</td>
+            <td>${ item.doctor.fullName }</td>
+            <td>${ item.createAt }</td>
+            <td>
+                <a load="/blooddonate/${item.id}">Details</a> 
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,5 +1,5 @@
 {
-  "name": "Blood-Donation-System",
+  "name": "demo-client",
   "description": "An Aurelia 2 client application.",
   "version": "0.1.0",
   "repository": {
@@ -9,6 +9,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "aurelia": "latest",
+    "aurelia-direct-router": "^2.0.0-alpha.2.3",
     "bootstrap": "^4.6.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",

@@ -1,7 +1,5 @@
 import { IJoke } from './../domain/IJoke';
-import { ICategorie } from './../domain/ICategorie';
 import { HttpClient, inject } from "aurelia";
-import { Console } from 'node:console';
 
 @inject()
 export class JokesService {

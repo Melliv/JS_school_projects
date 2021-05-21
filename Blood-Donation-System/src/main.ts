@@ -1,10 +1,9 @@
-import { Aurelia, RouterConfiguration } from 'aurelia';
+import { Aurelia } from 'aurelia';
+import { RouterConfiguration } from 'aurelia-direct-router';
 import { MyApp } from './my-app';
-import { AppLogin } from './app-login';
 
-import 'jquery';
-import 'popper.js';
-
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import '../static/sb-admin-2.min.css'
 import '../static/site.css'
 
 Aurelia
