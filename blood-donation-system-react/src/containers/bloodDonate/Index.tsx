@@ -1,32 +1,38 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import { AppContext } from "../../context/AppContext";
 import { BloodDonate } from "../../dto/BloodDonate";
 import { BaseService } from "../../services/base-service";
 import { EPageStatus } from "../../types/EPageStatus";
+import { IRoutePersonId } from "../../types/IRoutePersonId";
 
-const RowDisplay = (props: { bloodDonate: BloodDonate }) => (
+const RowDisplay = (props: { bloodDonate: BloodDonate }) => {
+    var dateFormat = require("dateformat");
+    return (
     <>
         <td>{props.bloodDonate.bloodGroup!.bloodGroupValue}</td>
         <td>{props.bloodDonate.amount}</td>
         <td>{props.bloodDonate.donor!.fullName}</td>
         <td>{props.bloodDonate.doctor!.fullName}</td>
-        <td>{props.bloodDonate.createAt}</td>
+        <td>{dateFormat(props.bloodDonate.createAt, "dd/mm/yyyy")}</td>
         <td>
             <Link to={'/BloodDonate/' + props.bloodDonate.id}>Details</Link>
         </td>
-    </>
-);
+    </>);
+} 
 
 const BloodDonateIndex = () => {
+    const { personId } = useParams() as IRoutePersonId;
     const [bloodDonates, setBloodDonates] = useState([] as BloodDonate[]);
     const [pageStatus, setPageStatus] = useState({ pageStatus: EPageStatus.Loading, statusCode: -1 });
     const appState = useContext(AppContext);
 
     const loadData = async () => {
-        let result = await BaseService.getAll<BloodDonate>('/BloodDonate', appState.token!);
+        let result = (personId == null) 
+            ? await BaseService.getAll<BloodDonate>('BloodDonate', appState.token!)
+            : await BaseService.getAll<BloodDonate>('BloodDonate/personId=' + personId, appState.token!);
 
         if (result.ok && result.data) {
             setPageStatus({ pageStatus: EPageStatus.OK, statusCode: 0 });

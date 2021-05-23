@@ -30,6 +30,7 @@ const BloodTestDetails = () => {
     const Info = (props: { bloodTest: {} }) => {
         if (!isEmptyObject(props.bloodTest)) {
             const _bloodTest = (props.bloodTest as BloodTest)
+            var dateFormat = require("dateformat");
             return (
                 <>
                     <div>
@@ -53,7 +54,7 @@ const BloodTestDetails = () => {
                                     Donor
                                 </dt>
                                 <dd className="col-sm-10">
-                                    {_bloodTest.donor!.fullName}
+                                    <Link to={"/Person/" + _bloodTest.donorId}>{_bloodTest.donor!.fullName}</Link>
                                 </dd>
                                 <dt className="col-sm-2">
                                     Doctor
@@ -77,7 +78,7 @@ const BloodTestDetails = () => {
                                     Create at
                                 </dt>
                                 <dd className="col-sm-10">
-                                    {_bloodTest.createAt}
+                                    {dateFormat(_bloodTest.createAt, "UTC:dd/mm/yyyy HH:mm")}
                                 </dd>
                                 <dt className="col-sm-2">
                                     Update by
@@ -89,14 +90,14 @@ const BloodTestDetails = () => {
                                     Updated at
                                 </dt>
                                 <dd className="col-sm-10">
-                                    {_bloodTest.updatedAt}
+                                    {dateFormat(_bloodTest.updatedAt, "UTC:dd/mm/yyyy HH:mm")}
                                 </dd>
                             </dl>
                         </div>
 
                     </div>
                     <div>
-                        <Link className="nav-link text-dark" to="/BloodTest/">to list</Link>
+                        <Link className="nav-link text-dark" to="/BloodTest">to list</Link>
                     </div>
                 </>)
         }

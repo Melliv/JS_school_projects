@@ -1,17 +1,18 @@
 import { useContext, useState } from "react";
 import { Redirect } from "react-router";
+import { Link } from "react-router-dom";
 import Alert, { EAlertClass } from "../../components/Alert";
 import { AppContext } from "../../context/AppContext";
 import { IdentityService } from "../../services/identity-service";
 
 const Register = () => {
     const validationTemplate = {
-        "error": "",
-        "email": "",
-        "password": "",
-        "confirmPassword": "",
-        "firstname": "",
-        "lastname": ""
+        error: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        firstname: "",
+        lastname: ""
     }
 
     const appState = useContext(AppContext);
@@ -31,28 +32,19 @@ const Register = () => {
         setAlertMessage(validationTemplate);
 
         const emailRe = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\],;:\s@"]+)*)|(".+"))@(([^<>()[\],;:\s@"]+\.)+[^<>()[\],;:\s@"]{2,})$/i;
-
         if(!emailRe.test(registerData.email)){
             setAlertMessage(prevState => ({
                 ...prevState,
-                "email": "Email is not valid!"
+                email: "Email is not valid!"
             }));
             formIsValid = false;
         }
 
         const passwordRe = /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/i;
-
         if(!passwordRe.test(registerData.password)) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "password": "Password requirements: Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character:"
-            }));
-            formIsValid = false;
-        }
-        if(registerData.password.length > 100) {
-            setAlertMessage(prevState => ({
-                ...prevState,
-                "password": "Password to long!"
+                password: "Password requirements: Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character:"
             }));
             formIsValid = false;
         }
@@ -60,37 +52,23 @@ const Register = () => {
         if(registerData.password !== registerData.confirmPassword) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "password": "Password and confirm password are not the same!"
+                password: "Password and confirm password are not the same!"
             }));
             formIsValid = false;
         }
 
-        if(registerData.firstname === "") {
+        if(!registerData.firstname) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "firstname": "Firstname field can not be empty!"
-            }));
-            formIsValid = false;
-        }
-        if(registerData.firstname.length > 128) {
-            setAlertMessage(prevState => ({
-                ...prevState,
-                "password": "Firstname to long!"
+                firstname: "Firstname field can not be empty!"
             }));
             formIsValid = false;
         }
 
-        if(registerData.lastname === "") {
+        if(!registerData.lastname) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "lastname": "Lastname field can not be empty!"
-            }));
-            formIsValid = false;
-        }
-        if(registerData.lastname.length > 128) {
-            setAlertMessage(prevState => ({
-                ...prevState,
-                "password": "Lastname to long!"
+                lastname: "Lastname field can not be empty!"
             }));
             formIsValid = false;
         }
@@ -101,7 +79,6 @@ const Register = () => {
     const registerClicked = async (e: Event) => {
         e.preventDefault();
 
-        console.log("hello");
         if (!handleValidation()) {
             return;
         };
@@ -117,7 +94,7 @@ const Register = () => {
         if (!response.ok) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "error": response.messages!
+                error: response.messages!
             }));
         } else {
             appState.setAuthInfo(response.data!.token, response.data!.firstname, response.data!.lastname);
@@ -155,30 +132,31 @@ const Register = () => {
                         <hr />
                         <div className="form-group">
                             <label asp-for="Input.Email">Email</label>
-                            <input value={registerData.email} onChange={(e) => handleChange(e.target)} className="form-control" id="email"/>
+                            <input value={registerData.email} onChange={(e) => handleChange(e.target)} maxLength={100} className="form-control" id="email"/>
                             <Alert show={alertMessage.email !== ''} message={alertMessage.email} alertClass={EAlertClass.Danger} />
                         </div>
                         <div className="form-group">
                             <label asp-for="Input.Password">Password</label>
-                            <input value={registerData.password} onChange={(e) => handleChange(e.target)} className="form-control" type="password" id="password"/>
+                            <input value={registerData.password} onChange={(e) => handleChange(e.target)} maxLength={100} className="form-control" type="password" id="password"/>
                             <Alert show={alertMessage.password !== ''} message={alertMessage.password} alertClass={EAlertClass.Danger} />
                         </div>
                         <div className="form-group">
                             <label asp-for="Input.ConfirmPassword">Confirme password</label>
-                            <input value={registerData.confirmPassword} onChange={(e) => handleChange(e.target)} className="form-control" type="password" id="confirmPassword"/>
+                            <input value={registerData.confirmPassword} onChange={(e) => handleChange(e.target)} maxLength={100} className="form-control" type="password" id="confirmPassword"/>
                             <Alert show={alertMessage.confirmPassword !== ''} message={alertMessage.confirmPassword} alertClass={EAlertClass.Danger} />
                         </div>
                         <div className="form-group">
                             <label asp-for="Input.FirstName">Firstname</label>
-                            <input value={registerData.firstname} onChange={(e) => handleChange(e.target)} className="form-control" id="firstname"/>
+                            <input value={registerData.firstname} onChange={(e) => handleChange(e.target)} maxLength={128} className="form-control" id="firstname"/>
                             <Alert show={alertMessage.firstname !== ''} message={alertMessage.firstname} alertClass={EAlertClass.Danger} />
                         </div>
                         <div className="form-group">
                             <label asp-for="Input.LastName">Lastname</label>
-                            <input value={registerData.lastname} onChange={(e) => handleChange(e.target)} className="form-control" id="lastname"/>
+                            <input value={registerData.lastname} onChange={(e) => handleChange(e.target)} maxLength={128} className="form-control" id="lastname"/>
                             <Alert show={alertMessage.lastname !== ''} message={alertMessage.lastname} alertClass={EAlertClass.Danger} />
                         </div>
                         <button onClick={(e) => registerClicked(e.nativeEvent)} type="submit" className="btn btn-primary">Register</button>
+                        <Link className="ml-2" to="/Identity/Login">Back to login</Link>
                     </form>
                 </div>
             </div>

@@ -46,12 +46,13 @@ const Login = () => {
                             </div>
                             <div className="form-group">
                                 <button onClick={(e) => logInClicked(e.nativeEvent)} type="submit" className="btn btn-primary">Log in</button>
+                                <Link className="ml-2" id="register" to="/Identity/Register">Register new user</Link> 
                             </div>
                         </section>
                     </div>
                 </div>
             </form>
-            <Link id="register" to="/Identity/Register">Register new user</Link> 
+            
         </>
     );
 }

@@ -2,6 +2,7 @@ import { ILoginResponse } from './../types/ILoginResponse';
 import Axios, { AxiosError } from 'axios';
 import { ApiBaseUrl } from '../configuration';
 import { IFetchResponse } from '../types/IFetchResponse';
+import { IMessages } from '../types/IMessages';
 
 export abstract class IdentityService {
     protected static axios = Axios.create({
@@ -26,7 +27,7 @@ export abstract class IdentityService {
             return {
                 ok: false,
                 statusCode: error.response?.status ?? 500,
-                messages: error.response!.data.title
+                messages: (error.response?.data as IMessages).messages.toString()
             }
         }
 
@@ -47,7 +48,7 @@ export abstract class IdentityService {
             return {
                 ok: false,
                 statusCode: error.response?.status ?? 500,
-                messages: error.response!.data.title
+                messages: (error.response?.data as IMessages).messages.toString()
             }
         }
 

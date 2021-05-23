@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import Alert, { EAlertClass } from "../../components/Alert";
 import { AppContext } from "../../context/AppContext";
 import { BloodGroup } from "../../dto/BloodGroup";
@@ -29,11 +29,13 @@ const initialFormValues: BloodTest = {
 };
 
 const FormView = (props: IFormProps<BloodTest>) => {
+    //const { personId, bloodGroupId } = useParams() as { personId: string, bloodGroupId: string };
     const validationTemplate = {
-        "error": "",
-        "donor": "",
-        "doctor": "",
-        "bloodGroup": ""
+        error: "",
+        donor: "",
+        doctor: "",
+        bloodGroup: "",
+        comments: ""
     }
 
     const [patients, setPatients] = useState([] as Person[]);
@@ -47,7 +49,7 @@ const FormView = (props: IFormProps<BloodTest>) => {
     const appState = useContext(AppContext);
 
     const loadData = async () => {
-        let resultPatients = await BaseService.getAll<Person>('/Persons/personType=Patient', appState.token!);
+        let resultPatients = await BaseService.getAll<Person>('/Persons', appState.token!);
         let resultDoctors = await BaseService.getAll<Person>('/Persons/personType=Doctor', appState.token!);
         let resultBloodGroup = await BaseService.getAll<BloodGroup>('/BloodGroup', appState.token!);
 
@@ -61,6 +63,10 @@ const FormView = (props: IFormProps<BloodTest>) => {
         } else {
             setPageStatus({ pageStatus: EPageStatus.Error, statusCode: resultBloodGroup.statusCode });
         }
+
+/*         if (personId && bloodGroupId) {
+            setFormValues({ ...formValues, donorId: target.value });
+        } */
     }
 
     const handleValidation = () => {
@@ -68,26 +74,26 @@ const FormView = (props: IFormProps<BloodTest>) => {
 
         setAlertMessage(validationTemplate);
 
-        if(props.values.donorId === ""){
+        if(!props.values.donorId){
             setAlertMessage(prevState => ({
                 ...prevState,
-                "donor": "Donor field can not be empty!"
+                donor: "Donor field can not be empty!"
             }));
             formIsValid = false;
         }
 
-        if(props.values.doctorId === ""){
+        if(!props.values.doctorId){
             setAlertMessage(prevState => ({
                 ...prevState,
-                "doctor": "Doctor field can not be empty!"
+                doctor: "Doctor field can not be empty!"
             }));
             formIsValid = false;
         }
 
-        if(props.values.bloodGroupId === ""){
+        if(!props.values.bloodGroupId){
             setAlertMessage(prevState => ({
                 ...prevState,
-                "bloodGroup": "blood group field can not be empty!"
+                bloodGroup: "blood group field can not be empty!"
             }));
             formIsValid = false;
         }
@@ -119,8 +125,8 @@ const FormView = (props: IFormProps<BloodTest>) => {
 
     return (
         <>
+            {submit !== "" ? <Redirect to={'/BloodTest/' + submit} /> : null}
             <form>
-                {submit !== "" ? <Redirect to={'/BloodTest/' + submit} /> : null}
                 <Alert show={alertMessage.error !== ''} message={alertMessage.error} alertClass={EAlertClass.Danger} />
                 <div className="form-group">
                     <label className="control-label">Doctor</label>
@@ -162,7 +168,8 @@ const FormView = (props: IFormProps<BloodTest>) => {
 
                 <div className="form-group">
                     <label htmlFor="formTextArea">Comments</label>
-                    <textarea value={props.values.comments ?? 0} onChange={(e) => props.handleChange(e.target)} className="form-control" id="comments" rows={3}></textarea>
+                    <textarea value={props.values.comments ?? 0} onChange={(e) => props.handleChange(e.target)} maxLength={1024} className="form-control" id="comments" rows={3}></textarea>
+                    <Alert show={alertMessage.comments !== ''} message={alertMessage.comments} alertClass={EAlertClass.Danger} />
                 </div>
 
                 <div className="form-group">
@@ -176,7 +183,15 @@ const FormView = (props: IFormProps<BloodTest>) => {
 
 
 const BloodTestCreate = () => {
+    const { personId, bloodGroupId } = useParams() as { personId: string, bloodGroupId: string };
+
     const [formValues, setFormValues] = useState(initialFormValues);
+
+    useEffect(() => {
+        if (personId && bloodGroupId) {
+            setFormValues({ ...formValues, donorId: personId, bloodGroupId: bloodGroupId});
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleChange = (target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => {
         switch (target.id) {

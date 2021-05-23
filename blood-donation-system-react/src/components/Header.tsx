@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 const Header = () => {
     const appState = useContext(AppContext);
@@ -9,12 +9,6 @@ const Header = () => {
     const logOutClicked = (e: Event, uri: string) => {
         e.preventDefault();
         appState.clearAuthInfo(appState);
-        setSubmit(uri);
-    }
-
-    const nameClicked = (e: Event, uri: string) => {
-        e.preventDefault();
-        console.log("here 1");
         setSubmit(uri);
     }
     
@@ -29,9 +23,9 @@ const Header = () => {
                 <div className="navbar-collapse collapse d-flex justify-content-end">
                     <ul className="navbar-nav float-right">
                         <li className="nav-item">
-                            <button onClick={(e) => nameClicked(e.nativeEvent, "/Identity/Profile")} className="nav-link btn btn-link text-dark" title="Manage">
+                            <Link to="/Identity/Profile" className="nav-link btn btn-link text-dark" title="Manage">
                                 Hello! {appState.firstName} {appState.lastName}
-                            </button>
+                            </Link>
                         </li>
                         <li className="nav-item">
                             <button onClick={(e) => logOutClicked(e.nativeEvent, "/Identity/Login")} className="nav-link btn btn-link text-dark">Logout</button>

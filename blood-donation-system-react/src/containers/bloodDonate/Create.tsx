@@ -7,9 +7,10 @@ import { Person } from "../../dto/Person";
 import { BaseService } from "../../services/base-service";
 import { EPageStatus } from "../../types/EPageStatus";
 import Alert, { EAlertClass } from "../../components/Alert";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import { IFormProps } from "../../types/IFormProps";
+import { IRoutePersonId } from "../../types/IRoutePersonId";
 
 const initialFormValues: BloodDonate = {
     id: "00000000-0000-0000-0000-000000000000",
@@ -32,11 +33,12 @@ const initialFormValues: BloodDonate = {
 
 const FormView = (props: IFormProps<BloodDonate>) => {
     const validationTemplate = {
-        "error": "",
-        "amount": "",
-        "donor": "",
-        "doctor": "",
-        "bloodTest": ""}
+        error: "",
+        amount: "",
+        donor: "",
+        doctor: "",
+        bloodTest: ""
+    }
 
     const [patients, setPatients] = useState([] as Person[]);
     const [doctors, setDoctors] = useState([] as Person[]);
@@ -48,7 +50,7 @@ const FormView = (props: IFormProps<BloodDonate>) => {
     const appState = useContext(AppContext);
 
     const loadData = async () => {
-        let resultPatients = await BaseService.getAll<Person>('/Persons/personType=Patient', appState.token!);
+        let resultPatients = await BaseService.getAll<Person>('/Persons', appState.token!);
         let resultDoctors = await BaseService.getAll<Person>('/Persons/personType=Doctor', appState.token!);
         let resultBloodTests = await BaseService.getAll<BloodTest>('/BloodTest/minimum', appState.token!);
 
@@ -76,23 +78,23 @@ const FormView = (props: IFormProps<BloodDonate>) => {
         if(props.values.amount === 0){
             setAlertMessage(prevState => ({
                 ...prevState,
-                "amount": "Amount can not be 0!"
+                amount: "Amount can not be 0!"
             }));
             formIsValid = false;
         }
 
-        if(props.values.donorId === ""){
+        if(!props.values.donorId){
             setAlertMessage(prevState => ({
                 ...prevState,
-                "donor": "Donor field can not be empty!"
+                donor: "Donor field can not be empty!"
             }));
             formIsValid = false;
         }
 
-        if(props.values.doctorId === ""){
+        if(!props.values.doctorId){
             setAlertMessage(prevState => ({
                 ...prevState,
-                "doctor": "Doctor field can not be empty!"
+                doctor: "Doctor field can not be empty!"
             }));
             formIsValid = false;
         }
@@ -100,7 +102,7 @@ const FormView = (props: IFormProps<BloodDonate>) => {
         if(props.values.bloodTestId === ""){
             setAlertMessage(prevState => ({
                 ...prevState,
-                "bloodTest": "bloodTest field can not be empty!"
+                bloodTest: "bloodTest field can not be empty!"
             }));
             formIsValid = false;
         }
@@ -119,22 +121,18 @@ const FormView = (props: IFormProps<BloodDonate>) => {
         if (!response.ok) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "error": response.messages!
+                error: response.messages!
             }));
 
         } else {
-            setAlertMessage(prevState => ({
-                ...prevState,
-                "error": ""
-            }));
             setSubmit(response.data!.id);
         }
     }
 
     return (
         <>
+        { submit !== "" ? <Redirect to={'/BloodDonate/' + submit} /> : null}
         <form>
-            { submit !== "" ? <Redirect to={'/BloodDonate/' + submit} /> : null}
             <Alert show={alertMessage.error !== ''} message={alertMessage.error} alertClass={EAlertClass.Danger} />
             <div className="form-group">
                 <label className="control-label">Donor</label>
@@ -186,8 +184,14 @@ const FormView = (props: IFormProps<BloodDonate>) => {
 
 
 const BloodDonateCreate = () => {
-
+    const { personId } = useParams() as IRoutePersonId;
     const [formValues, setFormValues] = useState(initialFormValues);
+
+    useEffect(() => {
+        if (personId) {
+            setFormValues({ ...formValues, donorId: personId });
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleChange = (target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => {
         switch (target.id) {

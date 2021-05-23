@@ -24,9 +24,9 @@ const Sidebar = () => {
                 </NavLink>
                 <div id="statistics" className="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
-                        <NavLink className="collapse-item" to="/Person" >General</NavLink>
-                        <NavLink className="collapse-item" to="/Person" >Blood donations</NavLink>
-                        <NavLink className="collapse-item" to="/Person" >Blood transfusions</NavLink>
+                        <NavLink className="collapse-item" to="/Statistics/General" >General</NavLink>
+                        <NavLink className="collapse-item" to="/Statistics/BloodDonate" >Blood donations</NavLink>
+                        <NavLink className="collapse-item" to="/Statistics/BloodTransfusion" >Blood transfusions</NavLink>
                     </div>
                 </div>
             </li>
@@ -56,7 +56,7 @@ const Sidebar = () => {
                 <NavLink className="nav-link collapsed" to="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i className="fas fa-fw fa-cog"></i>
-                    <span>BloodTesting</span>
+                    <span>Blood testing</span>
                 </NavLink>
                 <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
@@ -71,7 +71,7 @@ const Sidebar = () => {
                 <NavLink className="nav-link collapsed" to="#" data-toggle="collapse" data-target="#collapseThree"
                     aria-expanded="true" aria-controls="collapseThree">
                     <i className="fas fa-fw fa-cog"></i>
-                    <span>BloodDonation</span>
+                    <span>Blood donation</span>
                 </NavLink>
                 <div id="collapseThree" className="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
@@ -86,7 +86,7 @@ const Sidebar = () => {
                 <NavLink className="nav-link collapsed" to="#" data-toggle="collapse" data-target="#collapseFore"
                     aria-expanded="true" aria-controls="collapseThree">
                     <i className="fas fa-fw fa-cog"></i>
-                    <span>BloodTransfusion</span>
+                    <span>Blood transfusion</span>
                 </NavLink>
                 <div id="collapseFore" className="collapse" aria-labelledby="headingFore" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">

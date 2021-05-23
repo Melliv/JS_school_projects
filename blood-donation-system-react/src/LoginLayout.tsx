@@ -16,7 +16,7 @@ const LoginLayout = ( {children}: any ) => {
                         <div className="card-body p-0">
 
                             {appState.token != null ?
-                                <div className="container">
+                                <div className="container mt-2">
                                     <Link type="button" className="btn btn-primary" to="/">Home</Link>
                                 </div>
                                 :

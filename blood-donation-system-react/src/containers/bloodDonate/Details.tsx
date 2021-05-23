@@ -9,13 +9,11 @@ import { BaseService } from "../../services/base-service";
 import { EPageStatus } from "../../types/EPageStatus";
 import { IRouteId } from "../../types/IRouteId";
 
-
 const BloodDonateDetails = () => {
     const { id } = useParams() as IRouteId;
     const [bloodDonate, setBloodTest] = useState({ bloodDonate: {} });
     const [pageStatus, setPageStatus] = useState({ pageStatus: EPageStatus.Loading, statusCode: -1 });
     const appState = useContext(AppContext);
-
 
     const loadData = async () => {
         let result = await BaseService.get<BloodDonate>('/BloodDonate/' + id, appState.token!);
@@ -30,7 +28,8 @@ const BloodDonateDetails = () => {
 
     const Info = (props: { bloodDonate: {} }) => {
         if (!isEmptyObject(props.bloodDonate)) {
-            const _bloodDonate = props.bloodDonate as BloodDonate
+            const _bloodDonate = props.bloodDonate as BloodDonate;
+            var dateFormat = require("dateformat");
             return (
                 <>
                     <div>
@@ -53,7 +52,7 @@ const BloodDonateDetails = () => {
                                 Donor
                             </dt>
                             <dd className="col-sm-10">
-                                {_bloodDonate.donor!.fullName}
+                                <Link to={"/Person/" + _bloodDonate.donorId}>{_bloodDonate.donor!.fullName}</Link>
                             </dd>
                             <dt className="col-sm-2">
                                 Doctor
@@ -65,7 +64,7 @@ const BloodDonateDetails = () => {
                                 Expire date
                             </dt>
                             <dd className="col-sm-10">
-                                { _bloodDonate.expireDate }
+                                {dateFormat(_bloodDonate.expireDate, "mediumDate")}
                             </dd>
                             <dt className="col-sm-2">
                                 Created by
@@ -77,7 +76,7 @@ const BloodDonateDetails = () => {
                                 Create at
                             </dt>
                             <dd className="col-sm-10">
-                                {_bloodDonate.createAt}
+                                {dateFormat(_bloodDonate.createAt, "UTC:dd/mm/yyyy HH:mm")}
                             </dd>
                             <dt className="col-sm-2">
                                 Update by
@@ -89,12 +88,12 @@ const BloodDonateDetails = () => {
                                 Updated at
                             </dt>
                             <dd className="col-sm-10">
-                                {_bloodDonate.updatedAt}
+                                {dateFormat(_bloodDonate.updatedAt, "UTC:dd/mm/yyyy HH:mm")}
                             </dd>
                         </dl>
                     </div>
                     <div>
-                        <Link className="nav-link text-dark" to="/BloodDonate/">to list</Link>
+                        <Link className="nav-link text-dark" to="/BloodDonate">to list</Link>
                     </div>
                 </>)
         }

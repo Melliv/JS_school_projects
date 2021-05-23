@@ -1,0 +1,22 @@
+export interface IAppUser {
+    id: string,
+    userName: string,
+    normalizedUserName: string,
+    email: string,
+    normalizedEmail: string,
+    emailConfirmed: true,
+    passwordHash: string,
+    securityStamp: string,
+    concurrencyStamp: string,
+    phoneNumber: string,
+    phoneNumberConfirmed: true,
+    twoFactorEnabled: true,
+    lockoutEnd: Date,
+    lockoutEnabled: true,
+    accessFailedCount: number,
+    firstName: string,
+    lastName: string,
+    dob: Date,
+    firstLastName: string,
+    lastFirstName: string
+}

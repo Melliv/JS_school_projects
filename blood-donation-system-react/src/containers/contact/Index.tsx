@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import Alert, { EAlertClass } from "../../components/Alert";
@@ -27,9 +27,9 @@ const initialFormValues: Contact = {
 
 const ContactIndex = () => {
     const validationTemplate = {
-        "error": "",
-        "contactValue": "",
-        "contactType": "",
+        error: "",
+        contactValue: "",
+        contactType: "",
     }
 
     const { id } = useParams() as IRouteId;
@@ -39,10 +39,8 @@ const ContactIndex = () => {
 
     const [pageStatus, setPageStatus] = useState({ pageStatus: EPageStatus.Loading, statusCode: -1 });
     const appState = useContext(AppContext);
-    const [submit, setSubmit] = useState("");
     const [formValues, setFormValues] = useState(initialFormValues);
     const [alertMessage, setAlertMessage] = useState(validationTemplate);
-
 
     const loadData = async () => {
         setFormValues({ ...formValues, personId: id });
@@ -51,8 +49,6 @@ const ContactIndex = () => {
         let contactTypeResponse = await BaseService.getAll<ContactType>('contactTypes', appState.token!);
         let contactResponse = await BaseService.getAll<Contact>('Contacts/person=' + id, appState.token!);
 
-        console.log(contactResponse);
-        console.log(contactTypeResponse);
         if (personResponse.ok && personResponse.data &&
             contactTypeResponse.ok && contactTypeResponse.data &&
             contactResponse.ok && contactResponse.data) {
@@ -77,7 +73,7 @@ const ContactIndex = () => {
         if (!formValues.contactValue) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "contactValue": "contact value field can not be empty!"
+                contactValue: "Contact value field can not be empty!"
             }));
             formIsValid = false;
         }
@@ -85,7 +81,7 @@ const ContactIndex = () => {
         if (formValues.contactValue!.length > 128) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "contactValue": "contact value field can not be empty!"
+                contactValue: "Contact value field can not be empty!"
             }));
             formIsValid = false;
         }
@@ -93,7 +89,7 @@ const ContactIndex = () => {
         if (!formValues.contactTypeId) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "contactType": "contact type value field can not be empty!"
+                contactType: "Contact type value field can not be empty!"
             }));
             formIsValid = false;
         }
@@ -104,21 +100,18 @@ const ContactIndex = () => {
     const createSubmit = async (e: Event) => {
         e.preventDefault();
 
-        if (!handleValidation()) {
-            return;
-        }
+        if (!handleValidation()) return;
 
-        let response = await BaseService.post("Contacts", formValues, appState.token!);
-        console.log(response);
+        let response = await BaseService.post<Contact>("Contacts", formValues, appState.token!);
         if (!response.ok) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "error": response.messages!
+                error: response.messages!
             }));
         } else {
-            loadData();
-            setFormValues(initialFormValues);
-            setSubmit(response.data!.id);
+            const newContacts = contacts.concat(response.data!)
+            setContacts(newContacts);
+            setFormValues({ ...initialFormValues, personId: id });
         }
     }
 
@@ -126,11 +119,10 @@ const ContactIndex = () => {
         e.preventDefault();
 
         let response = await BaseService.delete<Contact>("Contacts/" + id, appState.token!);
-        console.log(response);
         if (!response.ok) {
             setAlertMessage(prevState => ({
                 ...prevState,
-                "error": response.messages!
+                error: response.messages!
             }));
         } else {
             const newContacts = contacts.filter((item) => item.id !== id);
@@ -144,8 +136,8 @@ const ContactIndex = () => {
         await deleteSubmit(e, contact.id);
         setFormValues(prevState => ({
             ...prevState,
-            "contactValue": contact.contactValue,
-            "contactTypeId": contact.contactTypeId
+            contactValue: contact.contactValue,
+            contactTypeId: contact.contactTypeId
         }));
     }
 
@@ -162,7 +154,7 @@ const ContactIndex = () => {
 
     const PersonInfo = (props: { person: {} }) => {
         if (!isEmptyObject(contacts)) {
-            const _person = props.person as Person
+            const _person = props.person as Person;
             return (
                 <h2 className="m-4">
                     <span className="font-weight-bold mr-2">
@@ -176,26 +168,15 @@ const ContactIndex = () => {
 
     return (
         <>
-            <PersonInfo {...person} />
-
-            {/*             <p>
-                <a asp-action="Create" asp-route-PersonId="@Model.PersonId">
-                    Create New
-                </a>
-            </p>
-
-            <p>
-                <a asp-area="" asp-controller="Persons" asp-action="Details" asp-route-id="@Model.PersonId">
-                    Person profile
-                </a>
-            </p> */}
             <Alert show={alertMessage.error !== ''} message={alertMessage.error} alertClass={EAlertClass.Danger} />
+            <Link to={'/Person/' + id}>Back to person details</Link>
+            <PersonInfo {...person} />
             <h3>Create</h3>
             <div className="row m-2">
                 <form asp-action="Create" className="row">
                     <div className="col">
                         <label className="control-label">Contact value</label>
-                        <input value={formValues.contactValue ?? 0} onChange={(e) => handleChange(e.target)} className="form-control" id="contactValue" />
+                        <input value={formValues.contactValue ?? 0} onChange={(e) => handleChange(e.target)} maxLength={128} className="form-control" id="contactValue" />
                         <Alert show={alertMessage.contactValue !== ''} message={alertMessage.contactValue} alertClass={EAlertClass.Danger} />
                     </div>
                     <div className="col">
@@ -220,7 +201,6 @@ const ContactIndex = () => {
                     <tr>
                         <th>Contact value</th>
                         <th>Contact type value</th>
-                        <th></th>
                         <th></th>
                     </tr>
                 </thead>

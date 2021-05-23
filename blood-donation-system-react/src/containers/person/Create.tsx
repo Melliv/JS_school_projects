@@ -29,14 +29,14 @@ const initialFormValues: Person = {
     fullName: "",
 };
 
-
 const FormView = (props: IFormProps<Person>) => {
     const validationTemplate = {
-        "error": "",
-        "firstname": "",
-        "lastname": "",
-        "identificationCode": "",
-        "personType": ""
+        error: "",
+        firstname: "",
+        lastname: "",
+        identificationCode: "",
+        personType: "",
+        comments: "",
     }
 
     const [personTypes, setPersonTypes] = useState([] as PersonType[]);
@@ -45,7 +45,6 @@ const FormView = (props: IFormProps<Person>) => {
 
     const [pageStatus, setPageStatus] = useState({ pageStatus: EPageStatus.Loading, statusCode: -1 });
     const [alertMessage, setAlertMessage] = useState(validationTemplate);
-
     const appState = useContext(AppContext);
 
     const loadData = async () => {
@@ -58,17 +57,17 @@ const FormView = (props: IFormProps<Person>) => {
             setPersonTypes(resultPersonType.data);
             setBloodGroups(resultBloodGroup.data);
         } else {
-            setPageStatus({ pageStatus: EPageStatus.Error, statusCode: resultBloodGroup.statusCode });
+            setPageStatus({ pageStatus: EPageStatus.Error, 
+                statusCode: (!resultPersonType.ok ?  resultPersonType : resultBloodGroup).statusCode });
         }
     }
 
     const handleValidation = () => {
-
         let formIsValid = true;
 
         setAlertMessage(validationTemplate)
 
-        if(props.values.firstname === ""){
+        if(!props.values.firstname){
             setAlertMessage(prevState => ({
                 ...prevState,
                 "firstname": "Firstname field can not be empty!"
@@ -76,7 +75,7 @@ const FormView = (props: IFormProps<Person>) => {
             formIsValid = false;
         }
 
-        if(props.values.lastname === ""){
+        if(!props.values.lastname){
             setAlertMessage(prevState => ({
                 ...prevState,
                 "lastname": "Lastname field can not be empty!"
@@ -84,7 +83,7 @@ const FormView = (props: IFormProps<Person>) => {
             formIsValid = false;
         }
 
-        if(props.values.identificationCode === ""){
+        if(!props.values.identificationCode){
             setAlertMessage(prevState => ({
                 ...prevState,
                 "identificationCode": "IdentificationCode field can not be empty!"
@@ -92,7 +91,7 @@ const FormView = (props: IFormProps<Person>) => {
             formIsValid = false;
         }
 
-        if(props.values.personTypeId === ""){
+        if(!props.values.personTypeId){
             setAlertMessage(prevState => ({
                 ...prevState,
                 "personType": "Person type field can not be empty!"
@@ -110,7 +109,6 @@ const FormView = (props: IFormProps<Person>) => {
             return;
         }
 
-        console.log(props.values);
         let response = await BaseService.post("Persons", props.values, appState.token!);
         if (!response.ok) {
             setAlertMessage(prevState => ({
@@ -133,22 +131,23 @@ const FormView = (props: IFormProps<Person>) => {
                 <Alert show={alertMessage.error !== ''} message={alertMessage.error} alertClass={EAlertClass.Danger} />
                 <div className="form-group">
                     <label className="control-label">Firstname</label>
-                    <input value={props.values.firstname ?? 0} onChange={(e) => props.handleChange(e.target)} className="form-control" id="firstname"/>
+                    <input value={props.values.firstname ?? 0} onChange={(e) => props.handleChange(e.target)} maxLength={128} className="form-control" id="firstname"/>
                     <Alert show={alertMessage.firstname !== ''} message={alertMessage.firstname} alertClass={EAlertClass.Danger} />
                 </div>
                 <div className="form-group">
                     <label className="control-label">Lastname</label>
-                    <input value={props.values.lastname ?? 0} onChange={(e) => props.handleChange(e.target)} className="form-control" id="lastname"/>
+                    <input value={props.values.lastname ?? 0} onChange={(e) => props.handleChange(e.target)} maxLength={128} className="form-control" id="lastname"/>
                     <Alert show={alertMessage.lastname !== ''} message={alertMessage.lastname} alertClass={EAlertClass.Danger} />
                 </div>
                 <div className="form-group">
                     <label className="control-label">IdentificationCode</label>
-                    <input value={props.values.identificationCode ?? 0} onChange={(e) => props.handleChange(e.target)} className="form-control" id="identificationCode"/>
+                    <input value={props.values.identificationCode ?? 0} onChange={(e) => props.handleChange(e.target)} maxLength={128} className="form-control" id="identificationCode"/>
                     <Alert show={alertMessage.identificationCode !== ''} message={alertMessage.identificationCode} alertClass={EAlertClass.Danger} />
                 </div>
                 <div className="form-group">
                     <label className="control-label">Comments</label>
-                    <textarea value={props.values.comments ?? 0} onChange={(e) => props.handleChange(e.target)} className="form-control" rows={5} id="comments"></textarea>
+                    <textarea value={props.values.comments ?? 0} onChange={(e) => props.handleChange(e.target)} maxLength={1024} className="form-control" rows={5} id="comments"></textarea>
+                    <Alert show={alertMessage.comments !== ''} message={alertMessage.comments} alertClass={EAlertClass.Danger} />
                 </div>
                 <div className="form-group">
                     <label className="control-label">Person type</label>
