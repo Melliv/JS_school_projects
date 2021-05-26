@@ -41,8 +41,11 @@ export default createStore({
     actions: {
         async logIn(context, login: ILoginInfo): Promise<void> {
             const loginDataStr = JSON.stringify(login);
+            // https://localhost:5051/api/v1/
+            // http://blooddonate.azurewebsites.net/api/v1/
+
             const response = await axios.post(
-                'https://localhost:5051/api/v1/Account/Login?api-version=1',
+                'http://blooddonate.azurewebsites.net/api/v1/Account/Login',
                 loginDataStr,
                 { headers: { 'Content-type': 'application/json' } }
             );

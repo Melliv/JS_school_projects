@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import { BrowserRouter as Router } from "react-router-dom";
+
 import 'jquery';
 import 'popper.js';
 import 'bootstrap';
@@ -7,11 +12,6 @@ import 'bootstrap';
 import './assets/sb-admin-2.min.css';
 //import './assets/all.min.css';
 import './assets/site.css';
-
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import { BrowserRouter as Router } from "react-router-dom";
 
 ReactDOM.render(
     <Router basename={process.env.PUBLIC_URL}>

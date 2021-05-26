@@ -11,17 +11,20 @@
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
     "axios": "^0.21.1",
+    "bootstrap": "^4.5.0",
     "dateformat": "^4.5.1",
     "http-status-codes": "^2.1.4",
+    "jquery": "^3.6.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
+    "popper.js": "^1.16.1",
     "react": "^17.0.2",
     "react-datetime": "^3.0.4",
     "react-dom": "^17.0.2",
     "react-google-charts": "^3.0.15",
     "react-moment": "^1.1.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.3",
     "typescript": "^4.2.4",
     "web-vitals": "^1.1.1"
   },
@@ -50,6 +53,8 @@
     ]
   },
   "devDependencies": {
+    "@types/bootstrap": "^5.0.15",
+    "@types/jquery": "^3.5.5",
     "@types/react-router-dom": "^5.1.7"
   }
 }

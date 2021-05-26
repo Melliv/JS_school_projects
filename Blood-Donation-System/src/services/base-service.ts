@@ -7,10 +7,12 @@ export interface IEntityId {
 }
 
 export class BaseService<TEntity> {
+    protected apiEndpointUrl: string = "";
 
-    constructor(protected apiEndpointUrl: string, protected httpClient: HttpClient, private jwt?: string) {
-        // apiEndpointUrl = https://xxx.xxx.xxx.xx/api/v1/ContactTypes
-
+    constructor(uri: string, protected httpClient: HttpClient, private jwt?: string) {
+        this.apiEndpointUrl = "http://blooddonate.azurewebsites.net/api/v1/" + uri
+        // https://localhost:5051/api/v1/
+        // http://blooddonate.azurewebsites.net/api/v1/
     }
 
     private authHeaders = this.jwt !== undefined ?

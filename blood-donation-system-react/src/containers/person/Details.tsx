@@ -93,7 +93,7 @@ const PersonDetails = () => {
                                 Create at
                             </dt>
                             <dd className="col-sm-10">
-                                {dateFormat(_person.createAt, "UTC:dd/mm/yyyy HH:mm")}
+                                {dateFormat(_person.createAt, "dd/mm/yyyy HH:MM")}
                             </dd>
                             <dt className="col-sm-2">
                                 Update by
@@ -105,7 +105,7 @@ const PersonDetails = () => {
                                 Updated at
                             </dt>
                             <dd className="col-sm-10">
-                                {dateFormat(_person.updatedAt, "UTC:dd/mm/yyyy HH:mm")}
+                                {dateFormat(_person.updatedAt, "dd/mm/yyyy HH:MM")}
                             </dd>
                             <dt className="col-sm-2">
                                 Person can donate from

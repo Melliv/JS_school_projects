@@ -17,7 +17,7 @@ const Login = () => {
             setAlertMessage('Empty email or pawwsord!');
         };
 
-        let response = await IdentityService.Login('account/login', loginData);
+        let response = await IdentityService.Login('/Account/Login', loginData);
         if (!response.ok) {
             setAlertMessage(response.messages!);
         } else {
@@ -30,7 +30,7 @@ const Login = () => {
         <>
             { appState.token !== null ? <Redirect to="/" /> : null}
             <h1>Log in</h1>
-            <form onSubmit={(e) => logInClicked(e.nativeEvent)}>
+            <form>
                 <div className="row">
                     <div className="col-md-6">
                         <section>

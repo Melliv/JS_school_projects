@@ -86,7 +86,7 @@ export default class BloodTransfusionDetails extends Vue {
 
     mounted(): void {
         const service = new BaseService<BloodTransfusion>(
-            "https://localhost:5051/api/v1/BloodTransfusion",
+            "BloodTransfusion",
             store.state.token ? store.state.token : undefined
         );
 

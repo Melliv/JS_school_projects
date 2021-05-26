@@ -26,7 +26,7 @@ const initialFormValues: BloodDonate = {
     blootest: null,
     bloodGroupId: "00000000-0000-0000-0000-000000000000",
     bloodGroup: null,
-    amount: 0,
+    amount: "",
     available: true,
     expireDate: "0001-01-01T00:00:00",
 };
@@ -75,7 +75,7 @@ const FormView = (props: IFormProps<BloodDonate>) => {
 
         setAlertMessage(validationTemplate);
 
-        if(props.values.amount === 0){
+        if(!props.values.amount){
             setAlertMessage(prevState => ({
                 ...prevState,
                 amount: "Amount can not be 0!"
@@ -99,7 +99,7 @@ const FormView = (props: IFormProps<BloodDonate>) => {
             formIsValid = false;
         }
 
-        if(props.values.bloodTestId === ""){
+        if(!props.values.bloodTestId){
             setAlertMessage(prevState => ({
                 ...prevState,
                 bloodTest: "bloodTest field can not be empty!"
@@ -169,7 +169,7 @@ const FormView = (props: IFormProps<BloodDonate>) => {
 
             <div className="form-group">
                 <label className="control-label">Amount</label>
-                <input value={props.values.amount ?? 0} onChange={(e) => props.handleChange(e.target)} className="form-control" id="amount" />
+                <input value={props.values.amount ?? 0} onChange={(e) => props.handleChange(e.target)} type="number" step="0.1" placeholder="0" className="form-control" id="amount" />
                 <Alert show={alertMessage.amount !== ''} message={alertMessage.amount} alertClass={EAlertClass.Danger} />
             </div>
 
@@ -205,7 +205,7 @@ const BloodDonateCreate = () => {
                 setFormValues({ ...formValues, bloodTestId: target.value });
                 return;
             case 'amount':
-                setFormValues({ ...formValues, amount: target.value === "" ? 0 : parseInt(target.value) });
+                setFormValues({ ...formValues, amount: target.value });
                 return;
         }
     }

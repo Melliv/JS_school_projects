@@ -16,7 +16,7 @@ export class BloodDonate extends MetaData {
     bloodGroupId: string | null = null
     bloodGroup: BloodGroup | null = null
 
-    amount: number | null = null
+    amount: string | null = null
     available: boolean = true
 
     expireDate: string | null = null

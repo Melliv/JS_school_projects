@@ -4,8 +4,13 @@ import { IJwt } from "../types/IJwt";
 import { IMessage } from "../types/IMessage";
 
 export class AccountService {
-    constructor(protected apiEndpointUrl: string, protected httpClient: HttpClient) {
-        // apiEndpointUrl = https://xxx.xxx.xxx.xx/api/v1/ContactTypes
+
+    protected apiEndpointUrl: string = "";
+
+    constructor(uri: string, protected httpClient: HttpClient) {
+        this.apiEndpointUrl = "http://blooddonate.azurewebsites.net/api/v1/" + uri
+        // https://localhost:5051/api/v1/
+        // http://blooddonate.azurewebsites.net/api/v1/
     }
 
     async login(email: string, password: string): Promise<IFetchResponse<IJwt | IMessage>> {
@@ -16,7 +21,7 @@ export class AccountService {
             let body = {email, password};
             let bodyStr = JSON.stringify(body);
 
-            const response = await this.httpClient.post(url + "?api-version=1", bodyStr , { cache: "no-store" });
+            const response = await this.httpClient.post(url, bodyStr , { cache: "no-store" });
 
             if (response.ok) {
                 const data = (await response.json()) as IJwt;

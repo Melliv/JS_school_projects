@@ -76,7 +76,7 @@ const BloodDonateDetails = () => {
                                 Create at
                             </dt>
                             <dd className="col-sm-10">
-                                {dateFormat(_bloodDonate.createAt, "UTC:dd/mm/yyyy HH:mm")}
+                                {dateFormat(_bloodDonate.createAt, "dd/mm/yyyy HH:MM")}
                             </dd>
                             <dt className="col-sm-2">
                                 Update by
@@ -88,7 +88,7 @@ const BloodDonateDetails = () => {
                                 Updated at
                             </dt>
                             <dd className="col-sm-10">
-                                {dateFormat(_bloodDonate.updatedAt, "UTC:dd/mm/yyyy HH:mm")}
+                                {dateFormat(_bloodDonate.updatedAt, "dd/mm/yyyy HH:MM")}
                             </dd>
                         </dl>
                     </div>

@@ -2,7 +2,7 @@ import { MetaData } from "./meta/MetaData";
 import { Person } from "./Person";
 import { BloodGroup } from "./BloodGroup";
 export class BloodTransfusion extends MetaData {
-    amount: number | null = null
+    amount: string | null = null
     commentsId: string | null = null
     comments: string | null = null
 

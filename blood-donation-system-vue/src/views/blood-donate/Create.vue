@@ -82,7 +82,7 @@ export default class BloodDonateCreate extends Vue {
 
     mounted(): void {
         const servicePerson = new BaseService<Person>(
-            "https://localhost:5051/api/v1/Persons",
+            "Persons",
             store.state.token ? store.state.token : undefined
         );
         servicePerson.getAll(["personType=patient"]).then((data) => {
@@ -93,7 +93,7 @@ export default class BloodDonateCreate extends Vue {
         });
 
         const serviceBloodGroup = new BaseService<BloodTest>(
-            "https://localhost:5051/api/v1/BloodTest/minimum",
+            "BloodTest/minimum",
             store.state.token ? store.state.token : undefined
         );
         serviceBloodGroup.getAll().then((data) => {
@@ -103,7 +103,7 @@ export default class BloodDonateCreate extends Vue {
 
     create(): void {
         const service = new BaseService<BloodDonate>(
-            "https://localhost:5051/api/v1/BloodDonate",
+            "BloodDonate",
             store.state.token ? store.state.token : undefined
         );
         console.log(JSON.stringify(this.bloodDonate))

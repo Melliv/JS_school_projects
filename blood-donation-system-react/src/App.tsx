@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 
 import LoginLayout from './LoginLayout'
 import MainLayout from './MainLayout'
@@ -42,7 +42,6 @@ const App = () => {
     return (
         <>
             <AppContextProvider value={appState} >
-                <Router>
                     <Switch>
 
                         <Route path='/Identity' >
@@ -97,7 +96,6 @@ const App = () => {
                         </Route>
 
                     </Switch>
-                </Router>
             </AppContextProvider>
         </>
     )

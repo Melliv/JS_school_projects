@@ -5,7 +5,7 @@ import { AppState } from '../../state/app-state';
 
 export class BloodDonateIndex {
     private service: BaseService<BloodDonate> = 
-        new BaseService<BloodDonate>("https://localhost:5051/api/v1/BloodDonate", 
+        new BaseService<BloodDonate>("BloodDonate", 
         this.httpClient,
         this.state.token);
 

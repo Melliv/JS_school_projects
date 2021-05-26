@@ -11,7 +11,7 @@ import { IRouter } from 'aurelia-direct-router';
 
 export class BloodDonateCreate {
     private service: BaseService<BloodDonate> = 
-        new BaseService<BloodDonate>("https://localhost:5051/api/v1/BloodDonate", 
+        new BaseService<BloodDonate>("BloodDonate", 
         this.httpClient,
         this.state.token);
     
@@ -44,16 +44,16 @@ export class BloodDonateCreate {
     async attached() {
 
         let servicePerson: BaseService<Person> = 
-            new BaseService<Person>("https://localhost:5051/api/v1/Persons", 
+            new BaseService<Person>("Persons", 
             this.httpClient,
             this.state.token);
 
         let serviceBloodTest: BaseService<BloodTest> = 
-            new BaseService<BloodTest>("https://localhost:5051/api/v1/BloodTest/minimum", 
+            new BaseService<BloodTest>("BloodTest/minimum", 
             this.httpClient,
             this.state.token);
 
-        let responsePatients = await servicePerson.getAll(["personType=patient"]);
+        let responsePatients = await servicePerson.getAll();
         let responseDoctors = await servicePerson.getAll(["personType=doctor"]);
         let responseBloodTests = await serviceBloodTest.getAll();
 

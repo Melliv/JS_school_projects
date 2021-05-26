@@ -50,7 +50,7 @@ export default class BloodDonateIndex extends Vue {
 
     mounted(): void {
         const service = new BaseService<BloodDonate>(
-            "https://localhost:5051/api/v1/BloodDonate",
+            "BloodDonate",
             store.state.token ? store.state.token : undefined
         );
         service.getAll().then((data) => {

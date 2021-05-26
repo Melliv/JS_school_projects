@@ -48,7 +48,7 @@ export default class BloodTestIndex extends Vue {
 
     mounted(): void {
         const service = new BaseService<BloodTest>(
-            "https://localhost:5051/api/v1/BloodTest",
+            "BloodTest",
             store.state.token ? store.state.token : undefined
         );
         service.getAll().then((data) => {

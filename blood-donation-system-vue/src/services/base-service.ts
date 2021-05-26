@@ -3,21 +3,26 @@ import { IQueryParams } from "@/types/IQueryParams";
 import axios from 'axios';
 
 export class BaseService<TEntity> {
-    constructor(protected apiEndpointUrl: string, private jwt?: string) {
-        console.log('BaseService.constructor');
-        // apiEndpointUrl = https://xxx.xxx.xxx.xx/api/v1/ContactTypes
+    protected apiEndpointUrl: string = "";
+
+    constructor(protected uri: string, private jwt?: string) {
+        this.apiEndpointUrl = "http://blooddonate.azurewebsites.net/api/v1/" + uri
+        // https://localhost:5051/api/v1/
+        // http://blooddonate.azurewebsites.net/api/v1/
     }
 
     private authHeaders = this.jwt !== undefined
         ? {
-            'Cache-Control': 'no-cache',
-            Pragma: 'no-cache',
-            Expires: '0',
+            /* 'Cache-Control': 'no-cache', */
+            /* Pragma: 'no-cache', */
+            /* Expires: '0', */
+            "Content-Type": 'application/json',
             Authorization: 'Bearer ' + this.jwt
         } : {
-            'Cache-Control': 'no-cache',
-            Pragma: 'no-cache',
-            Expires: '0',
+            "Content-Type": 'application/json'
+            /* 'Cache-Control': 'no-cache', */
+            /* Pragma: 'no-cache', */
+            /* Expires: '0', */
         };
 
     async getAll(queryParams?: IQueryParams,): Promise<IFetchResponse<TEntity[]>> {
@@ -28,6 +33,8 @@ export class BaseService<TEntity> {
             url = url + "/" + queryParams[0];
         }
 
+        console.log("url");
+        console.log(url);
         try {
             const response = await axios.get(url, { headers: this.authHeaders });
             if (response.status >= 200 && response.status < 300) {
@@ -36,11 +43,13 @@ export class BaseService<TEntity> {
                     data: response.data as TEntity[],
                 };
             }
+            // console.log(response);
             return {
                 statusCode: response.status,
                 errorMessage: response.statusText,
             };
         } catch (reason) {
+            console.log(JSON.parse(JSON.stringify(reason)));
             return {
                 statusCode: 0,
                 errorMessage: JSON.stringify(reason),
