@@ -1,0 +1,26 @@
+<import from="../../components/alert" />
+
+<div class="row">
+    <div class="col-sm-1 col-md-3"></div>
+    <div class="col-sm-10 col-md-6">
+
+        <h4>Use a local account to log in.</h4>
+        <hr />
+        <alert value.bind="errors.generalError"/>
+        <div class="form-group">
+            <label>Email</label>
+            <input class="form-control" type="email" id="Input_Email" value.bind="email" />
+            <alert value.bind="errors.email"/>
+        </div>
+        <div class="form-group">
+            <label">Password</label>
+            <input class="form-control" type="password" id="Input_Password" value.bind="password" />
+            <alert value.bind="errors.password"/>
+        </div>
+        <div class="form-group">
+            <button click.delegate="loginClicked($event)" type="submit" class="btn btn-primary">Log in</button>
+            <a class="collapse-item ml-2" load="/register">Register</a>
+        </div>
+    </div>
+    <div class="col-sm-1 col-md-3"></div>
+</div>

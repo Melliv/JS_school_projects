@@ -1,0 +1,39 @@
+<import from="../../components/alert" />
+
+<alert value.bind="errors.generalError" />
+<div class="row">
+    <div class="col-md-4">
+        <h4>Create new account</h4>
+        <hr />
+        <div class="form-group">
+            <label>Email</label>
+            <input value.bind="registerDTO.email" :maxLength="100" class="form-control" id="email"/>
+            <alert value.bind="errors.email" />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input value.bind="registerDTO.password" :maxLength="100" class="form-control" type="password" id="password"/>
+            <alert value.bind="errors.password" />
+        </div>
+        <div class="form-group">
+            <label>Confirme password</label>
+            <input value.bind="confirmPassword" :maxLength="100" class="form-control" type="password" id="confirmPassword"/>
+        </div>
+        <div class="form-group">
+            <label>Firstname</label>
+            <input value.bind="registerDTO.firstname" :maxLength="128" class="form-control" id="firstname"/>
+            <alert value.bind="errors.firstname" />
+        </div>
+        <div class="form-group">
+            <label>Lastname</label>
+            <input value.bind="registerDTO.lastname" :maxLength="128" class="form-control" id="lastname"/>
+            <alert value.bind="errors.lastname" />
+        </div>
+        <button click.delegate="registerClicked()" type="submit" class="btn btn-primary">
+            Register
+        </button>
+        <a class="ml-2" load="/login">
+            Login
+        </a>
+    </div>
+</div>

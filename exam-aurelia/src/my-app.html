@@ -1,0 +1,51 @@
+<import from="views/identity/identity-login" />
+<import from="views/identity/identity-register" />
+
+<import from="components/app-sidebar.html" />
+<import from="components/app-footer.html" />
+
+<body id="page-top">
+
+    <div id="wrapper">
+
+        <app-sidebar></app-sidebar>
+
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <div class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <div class="navbar-collapse collapse d-flex justify-content-end">
+                    <ul class="navbar-nav float-right">
+                        
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" >
+                                Hello! ${ state.firstname } ${ state.lastname }
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                
+                            <a click.delegate="logOut($event)" class="nav-link btn btn-link text-dark" >
+                                Logout
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>                
+            </div>
+
+            <div class="container-fluid">
+                <div id="content">
+                    <div class="container">
+                        <main role="main" class="pb-3">
+                            <au-viewport name="my-app"></au-viewport>
+                        </main>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <app-footer></app-footer>
+
+</body>

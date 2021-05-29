@@ -1,0 +1,6 @@
+<div if.bind="value.pageStatus === pageStatusLoading" >
+    <div class="alert alert-primary">Loading...</div>
+</div>
+<div if.bind="value.pageStatus === pageStatusError" >
+    <div class="alert alert-danger">Error... ${ value.statusCode }</div>
+</div>
