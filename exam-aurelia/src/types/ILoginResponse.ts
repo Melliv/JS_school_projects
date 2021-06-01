@@ -2,4 +2,5 @@ export interface ILoginResponse {
     token: string;
     firstname: string;
     lastname: string;
+    role: string;
 }

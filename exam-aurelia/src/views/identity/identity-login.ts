@@ -8,7 +8,7 @@ import { LoginErrors } from "../../domain/errors/LoginErrors";
 export class IdentityLogin {
     errors: LoginErrors = new LoginErrors();
 
-    private email: string = "admin@bloody.ee";
+    private email: string = "teacher@teacher.ee";
     private password: string = "Foo.bar1";
 
     constructor(
@@ -21,12 +21,13 @@ export class IdentityLogin {
     async loginClicked(event: Event) {
         event.preventDefault();
         event.stopPropagation();
-
+        
         if (!this.handleValidation()) {
             return;
         }
 
         const response = await IdentityService.Login('/Account/Login', { email: this.email, password: this.password });
+
         if (!response.ok) {
             this.errors.generalError.message = response.messages ? response.messages : response.statusCode.toString();
         } else {

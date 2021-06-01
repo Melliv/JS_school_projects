@@ -11,7 +11,7 @@ export class IdentityLogin {
     private service: AccountService =
         new AccountService("Account/login", this.httpClient);
 
-    private email: string = "admin@bloody.ee";
+    private email: string = "admin@admin.ee";
     private password: string = "Foo.bar1";
 
     constructor(
@@ -31,6 +31,7 @@ export class IdentityLogin {
             this.state.token = (response.data as IJwt).token;
             this.state.firstname = (response.data as IJwt).firstname;
             this.state.lastname = (response.data as IJwt).lastname;
+            this.state.role = (response.data as IJwt).role;
 
             await this.router.load('home');
         }

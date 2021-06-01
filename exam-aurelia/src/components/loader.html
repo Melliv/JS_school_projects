@@ -1,6 +1,14 @@
-<div if.bind="value.pageStatus === pageStatusLoading" >
-    <div class="alert alert-primary">Loading...</div>
+<div if.bind="value.message" >
+    <div class="alert alert-danger">${ value.message }</div>
 </div>
-<div if.bind="value.pageStatus === pageStatusError" >
-    <div class="alert alert-danger">Error... ${ value.statusCode }</div>
+<div if.bind="!value.message">
+    <div if.bind="value.pageStatus === pageStatusLoading" >
+        <div class="alert alert-primary">Loading...</div>
+    </div>
+    <div if.bind="value.pageStatus === pageStatusError" >
+        <div class="alert alert-danger">Error... ${ value.statusCode }</div>
+    </div>
+    <div if.bind="value.pageStatus === pageStatusCantDelete" >
+        <div class="alert alert-danger">${ value.pageStatus }</div>
+    </div>
 </div>

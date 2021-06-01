@@ -1,0 +1,49 @@
+<div class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+    <div class="navbar-collapse collapse d-flex justify-content-end">
+        <ul class="navbar-nav float-right">
+            <!---
+        if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Admin"))
+        --->
+
+            <li class="nav-item"  if.bind="appState.token != ''">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                    Hello! ${ appState.firstname } ${ appState.lastname }
+                </a>
+            </li>
+            <li class="nav-item" if.bind="appState.token != ''">
+                <form class="form-inline">
+                    <a click.delegate="logOut($event)" class="nav-link btn btn-link text-dark">
+                        Logout
+                    </a>
+                </form>
+            </li>
+
+
+            <form class="form-inline" if.bind="appState.token == ''">
+                <a class="nav-link btn btn-link text-dark" load="/Login">
+                    Login
+                </a>
+            </form>
+
+
+        </ul>
+    </div>
+</div>
+
+<!-- <div class="navbar-collapse collapse d-flex justify-content-end">
+    <ul class="navbar-nav float-right">
+        
+        <li class="nav-item">
+            <a class="nav-link text-dark" >
+                Hello! ${ state.firstname } ${ state.lastname }
+            </a>
+        </li>
+        <li class="nav-item">
+
+            <a click.delegate="logOut($event)" class="nav-link btn btn-link text-dark" >
+                Logout
+            </a>
+        </li>
+
+    </ul>
+</div>  -->

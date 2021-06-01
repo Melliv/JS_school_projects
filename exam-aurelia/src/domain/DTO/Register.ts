@@ -3,4 +3,5 @@ export class Register {
     password: string = ""
     firstname: string = ""
     lastname: string = ""
+    role: string = ""
 }

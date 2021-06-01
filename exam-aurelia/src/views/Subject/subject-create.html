@@ -1,0 +1,48 @@
+<import from="../../components/loader" />
+<import from="../../components/alert" />
+
+
+<h1 if.bind="edit">
+    Edit
+</h1>
+<h1 if.bind="!edit">
+    Create
+</h1>
+
+<h4>Subject</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <alert value.bind="errors.generalError"/>
+            <div class="form-group">
+                <label class="control-label">Name</label>
+                <input value.bind="subject.name" class="form-control" />
+                <alert value.bind="errors.name"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Description</label>
+                <textarea value.bind="subject.description" class="form-control" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Teacher</label>
+                <select value.bind="subject.personId" class="form-control">
+                    <option></option>
+                    <option repeat.for="person of persons" value="${person.id}">
+                        ${ person.firstLastName }
+                    </option>
+                </select>
+                <alert value.bind="errors.person"/>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" click.delegate="create($event)">Create</button>
+            </div>
+        </form>
+        <loader value.bind="pageLoader" />
+    </div>
+</div>
+
+<div>
+    <a to="/Subject">Back to List</a>
+</div>

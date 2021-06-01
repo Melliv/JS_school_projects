@@ -9,6 +9,8 @@ export class Loader {
     pageStatusLoading: EPageStatus = EPageStatus.Loading;
     pageStatusError: EPageStatus = EPageStatus.Error;
     pageStatusOk: EPageStatus = EPageStatus.OK;
+    pageStatusCantDelete: EPageStatus = EPageStatus.CantDelete;
+
 
     constructor(protected httpClient: HttpClient) {
     }

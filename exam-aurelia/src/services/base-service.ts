@@ -34,7 +34,7 @@ export abstract class BaseService {
             return {
                 ok: false,
                 statusCode: error.response?.status ?? 500,
-                messages: error.response!.data.title
+                messages: typeof(error.response!.data) === 'string' ? error.response!.data : error.response!.data.title
             }
         }
     }
@@ -52,7 +52,7 @@ export abstract class BaseService {
             return {
                 ok: false,
                 statusCode: error.response?.status ?? 500,
-                messages: error.response!.data.title
+                messages: typeof(error.response!.data) === 'string' ? error.response!.data : error.response!.data.title
             }
         }
     }
@@ -60,6 +60,24 @@ export abstract class BaseService {
     static async post<TEntity>(apiEndpoint: string, dto: TEntity, jwt?: string): Promise<IFetchResponse<TEntity>> {
         try {
             const response = await this.axios.post<TEntity>(apiEndpoint, dto, BaseService.getAxiosConfiguration(jwt));
+            return {
+                ok: response.status <= 299,
+                statusCode: response.status,
+                data: response.data
+            };
+        } catch (err) {
+            const error = err as AxiosError;
+            return {
+                ok: false,
+                statusCode: error.response?.status ?? 500,
+                messages: typeof (error.response!.data) === 'string' ? error.response!.data : error.response!.data.title
+            }
+        }
+    }
+
+    static async put<TEntity>(apiEndpoint: string, dto: TEntity, jwt?: string): Promise<IFetchResponse<TEntity>> {
+        try {
+            const response = await this.axios.put<TEntity>(apiEndpoint, dto, BaseService.getAxiosConfiguration(jwt));
             return {
                 ok: response.status <= 299,
                 statusCode: response.status,

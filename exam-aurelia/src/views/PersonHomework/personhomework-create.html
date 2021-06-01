@@ -1,0 +1,54 @@
+<import from="../../components/loader" />
+<import from="../../components/alert" />
+
+<h1>Create</h1>
+
+<h4>Person Homework</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <loader value.bind="pageLoader" />
+        <form asp-action="Create">
+            <alert value.bind="errors.generalError"/>
+            <div class="form-group">
+                <label class="control-label">Grade</label>
+                <input value.bind="personHomework.grade" class="form-control" />
+                <alert value.bind="errors.grade"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Points</label>
+                <input value.bind="personHomework.points" class="form-control" />
+                <alert value.bind="errors.points"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Student</label>
+                <select value.bind="personHomework.personId" class ="form-control">
+                    <option></option>
+                    <option repeat.for="person of persons" value="${person.id}">
+                        ${ person.firstLastName }
+                    </option>
+                </select>
+                <alert value.bind="errors.person"/>
+            </div>
+
+            <div if.bind="!hasHomework" class="form-group">
+                <label class="control-label">Homework</label>
+                <select value.bind="personHomework.homeworkId" class ="form-control">
+                    <option></option>
+                    <option repeat.for="homework of homeworks" value="${homework.id}">
+                        ${ homework.name }
+                    </option>
+                </select>
+                <alert value.bind="errors.homework"/>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" click.delegate="create($event)">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a load="/PersonHomework">Back to List</a>
+</div>

@@ -1,0 +1,57 @@
+<import from="../../components/loader" />
+
+<h1>Person Subjects</h1>
+
+<table class="table table-bordered">
+    <loader value.bind="pageLoader" />
+    <thead>
+        <tr>
+            <th>
+                Grade
+            </th>
+            <th>
+                Passed
+            </th>
+            <th>
+                Allowed
+            </th>
+            <th>
+                Person
+            </th>
+            <th>
+                Subject
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr repeat.for="item of personSubjects">
+            <td>
+                ${ item.grade }
+            </td>
+            <td>
+                ${ item.passed ? '✔' : '❌'}
+            </td>
+            <td>
+                ${ item.allowed ? '✔' : '❌'}
+            </td>
+            <td>
+                ${ item.person.firstLastName }
+            </td>
+            <td>
+                ${ item.subject.name }
+            </td>
+
+            <td>
+<!--                 @if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Evaluate student</a>@:|
+                } -->
+                <a load="/PersonSubject/${item.id}" >Details</a>
+<!--               |   <a asp-action="Delete" asp-route-id="@item.Id">Remove</a> -->
+            </td>
+        </tr>
+
+    </tbody>
+</table>

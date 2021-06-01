@@ -1,0 +1,53 @@
+<import from="../../components/loader" />
+<import from="../../components/alert" />
+
+<h1>Create</h1>
+
+<h4>Homework</h4>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <alert value.bind="errors.generalError"/>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Name</label>
+                <input value.bind="homework.name" maxlength="128" class="form-control"/>
+                <alert value.bind="errors.name"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Description</label>
+                <textarea value.bind="homework.description" maxlength="1024" class="form-control" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homework.MaxPoints" class="control-label">Max Points</label>
+                <input value.bind="homework.maxPoints" type="number" class="form-control"/>
+                <alert value.bind="errors.maxPoints"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homework.DateOfSubmission" class="control-label">Date Of Submission</label>
+                <input value.bind="homework.dateOfSubmission" type="date" class="form-control"/>
+                <alert value.bind="errors.dateOfSubmission"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Subject</label>
+                <select value.bind="homework.subjectId" class="form-control">
+                    <option></option>
+                    <option repeat.for="subject of subjects" value="${subject.id}">
+                        ${ subject.name }
+                    </option>
+                </select>
+                <alert value.bind="errors.subject"/>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" click.delegate="create($event)">Create</button>
+            </div>
+        </form>
+        <loader value.bind="pageLoader" />
+    </div>
+</div>
+
+<div>
+    <a load="/Homework">Back to List</a>
+</div>
