@@ -5,6 +5,7 @@ export class AppUser extends MetaData {
     firstName: string = ""
     lastName: string = ""
     DOB: string = ""
+    phoneNumber: string = ""
     roleName: string = ""
     firstLastName: string = ""
 }

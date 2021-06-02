@@ -19,6 +19,10 @@ export class HomeworkIndex implements IRouteViewModel {
     }
 
     async attached() {
+        if (this.appState.role == "") {
+            await this.router.load("/home");
+        }
+
         const result = await BaseService.getAll<Homework>("/Homework", this.appState.token);
 
         if (result.ok && result.data) {

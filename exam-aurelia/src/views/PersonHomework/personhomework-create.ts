@@ -31,20 +31,33 @@ export class PersonHomeworkCreate {
         @IRouter private router: IRouter,) {
     }
 
-    async load(parameters: { id: string }) {
+    async load(parameters: { id: string, addStudent: boolean }) {
+
+        if (parameters.addStudent) {
+            console.log("right");
+        
+            this.hasHomework = true;
+            this.personHomework.homeworkId = parameters.id;
+            return
+        }
+
         if (parameters.id) {
             this.hasHomework = true;
-/*             this.edit = true;
+            this.edit = true;
             this.id = parameters.id;
-            const result = await BaseService.get<Subject>("Subject/" + parameters.id, this.appState.token);
 
+            const result = await BaseService.get<PersonHomework>("/PersonHomework/" + parameters.id, this.appState.token);
+
+            console.log(result.data);
+            
             if (result.ok && result.data) {
                 this.pageLoader = { pageStatus: EPageStatus.OK, statusCode: 0 };
 
-                this.subject = result.data;
+                this.personHomework = result.data;
+                this.personHomework.person = null;
             } else {
                 this.pageLoader = { pageStatus: EPageStatus.Error, statusCode: result.statusCode };
-            } */
+            } 
         }
         
     }
@@ -103,6 +116,11 @@ export class PersonHomeworkCreate {
 
         if (!this.personHomework.personId) {
             this.errors.person.message = "Student value can not be empty!";
+            formIsValid = false;
+        }
+
+        if (!this.personHomework.personId) {
+            this.errors.person.message = "Person value can not be empty!";
             formIsValid = false;
         }
 

@@ -4,8 +4,8 @@ import { Subject } from "./Subject";
 
 export class PersonSubject extends MetaData {
     grade: string = ""
-    passed: boolean = false
-    allowed: boolean = false
+    passed: boolean | null = null
+    allowed: boolean | null = null
     personId: string = ""
     person: AppUser | null = null
     subjectId: string = ""

@@ -19,6 +19,10 @@ export class PersonHomeworkIndex {
     }
 
     async attached() {
+        if (this.appState.role == "") {
+            await this.router.load("/home");
+        }
+
         const result = await BaseService.getAll<PersonHomework>("/PersonHomework", this.appState.token);
 
         if (result.ok && result.data) {

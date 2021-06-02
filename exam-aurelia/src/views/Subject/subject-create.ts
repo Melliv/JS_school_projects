@@ -6,7 +6,7 @@ import { PageLoader } from '../../types/PageLoader';
 import { IRouter } from 'aurelia-direct-router';
 
 import { Subject } from '../../domain/DTO/Subject';
-import { Person } from '../../domain/Person';
+import { AppUser } from '../../domain/DTO/AppUser';
 import { SubjectErrors } from '../../domain/errors/SubjectErrors';
 import { IFetchResponse } from '../../types/IFetchResponse';
 
@@ -15,7 +15,7 @@ export class SubjectCreate {
     pageLoader: PageLoader = { pageStatus: EPageStatus.Loading, statusCode: -1 };
 
     subject: Subject = new Subject();
-    persons: Person[] = [];
+    persons: AppUser[] = [];
 
     edit: boolean = false;
     id?: string;
@@ -48,7 +48,7 @@ export class SubjectCreate {
             await this.router.load("/home");
         }
 
-        const result = await BaseService.getAll<Person>("/User/role=Teacher", this.appState.token);
+        const result = await BaseService.getAll<AppUser>("/User/role=Teacher", this.appState.token);
 
         if (result.ok && result.data) {
             this.pageLoader = { pageStatus: EPageStatus.OK, statusCode: 0 }

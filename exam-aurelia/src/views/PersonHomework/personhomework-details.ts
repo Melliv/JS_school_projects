@@ -5,12 +5,12 @@ import { EPageStatus } from '../../types/EPageStatus';
 import { PageLoader } from '../../types/PageLoader';
 import { IRouter } from "aurelia-direct-router";
 
-import { PersonSubject } from '../../domain/DTO/PersonSubject';
+import { PersonHomework } from '../../domain/DTO/PersonHomework';
 
-export class PersonSubjectDetails implements IRouteViewModel {
-    private personSubject?: PersonSubject;
+export class PersonHomeworkDetails implements IRouteViewModel {
+    personHomework?: PersonHomework;
 
-    private pageLoader: PageLoader = { pageStatus: EPageStatus.Loading, statusCode: -1 };
+    pageLoader: PageLoader = { pageStatus: EPageStatus.Loading, statusCode: -1 };
 
     constructor(
         @IRouter private router: IRouter,
@@ -18,17 +18,17 @@ export class PersonSubjectDetails implements IRouteViewModel {
         private appState: AppState){
     }
 
-    async load(parameters: { id: string}): Promise<void> {
+    async load(parameters: { id: string}){
         if (this.appState.role == "") {
             await this.router.load("/home");
         }
 
-        const result = await BaseService.get<PersonSubject>("/PersonSubject/" + parameters.id, this.appState.token);
-        
+        const result = await BaseService.get<PersonHomework>("/PersonHomework/" + parameters.id, this.appState.token);
+
         if (result.ok && result.data) {
             this.pageLoader = { pageStatus: EPageStatus.OK, statusCode: 0 };
 
-            this.personSubject = result.data;
+            this.personHomework = result.data;
         } else {
             this.pageLoader = { pageStatus: EPageStatus.Error, statusCode: result.statusCode };
         }

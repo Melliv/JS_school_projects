@@ -19,6 +19,10 @@ export class HomeworkDetails implements IRouteViewModel {
     }
 
     async load(parameters: { id: string}){
+        if (this.appState.role == "") {
+            await this.router.load("/home");
+        }
+
         const result = await BaseService.get<Homework>("/Homework/" + parameters.id, this.appState.token);
 
         if (result.ok && result.data) {

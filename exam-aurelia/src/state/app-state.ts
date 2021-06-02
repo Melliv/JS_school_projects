@@ -1,5 +1,6 @@
 import { ILoginResponse } from "../types/ILoginResponse";
 
+
 export class AppState {
     token: string = "";
     firstname: string = "";

@@ -19,11 +19,11 @@
     </div>
     
     <li class="nav-item">
-        <a class="nav-link" load="Person">
-            <div if.bind="appstate.role != 'Admin' || appstate.role != 'Teacher'">
+        <a class="nav-link" load="/Person">
+            <div if.bind="appState.role == 'Admin' || appState.role == 'Teacher'">
                 Persons
             </div>
-            <div if.bind="appstate.role == ''">
+            <div if.bind="appState.role == ''">
                 Teachers
             </div>
         </a>

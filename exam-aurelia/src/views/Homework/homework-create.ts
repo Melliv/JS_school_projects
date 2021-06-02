@@ -9,7 +9,7 @@ import { Homework } from '../../domain/DTO/Homework';
 import { Subject } from '../../domain/DTO/Subject';
 import { HomeworkErrors } from '../../domain/errors/HomeworkErrors';
 import { IFetchResponse } from '../../types/IFetchResponse';
-import { Person } from '../../domain/Person';
+import { AppUser } from '../../domain/DTO/AppUser';
 
 export class HomeworkCreate {
     errors: HomeworkErrors = new HomeworkErrors();
@@ -28,6 +28,10 @@ export class HomeworkCreate {
     }
 
     async load(parameters: { id: string }) {
+        if (this.appState.role == "") {
+            await this.router.load("/home");
+        }
+
         if (parameters.id) {
             this.edit = true;
             this.id = parameters.id;
@@ -36,12 +40,13 @@ export class HomeworkCreate {
             if (result.ok && result.data) {
                 this.pageLoader = { pageStatus: EPageStatus.OK, statusCode: 0 };
 
+                console.log(result.data);
                 this.homework = result.data;
             } else {
                 this.pageLoader = { pageStatus: EPageStatus.Error, statusCode: result.statusCode };
             }
         } else {
-            const result = await BaseService.get<Person>("/User/getMyAppUser" , this.appState.token);
+            const result = await BaseService.get<AppUser>("/User/getMyAppUser" , this.appState.token);
 
             if (result.ok && result.data) {
                 this.pageLoader = { pageStatus: EPageStatus.OK, statusCode: 0 }

@@ -17,12 +17,12 @@
             <alert value.bind="errors.generalError"/>
             <div class="form-group">
                 <label class="control-label">Name</label>
-                <input value.bind="subject.name" class="form-control" />
+                <input value.bind="subject.name" maxlength="128" class="form-control" />
                 <alert value.bind="errors.name"/>
             </div>
             <div class="form-group">
                 <label class="control-label">Description</label>
-                <textarea value.bind="subject.description" class="form-control" rows="5"></textarea>
+                <textarea value.bind="subject.description" maxlength="1024" class="form-control" rows="5"></textarea>
             </div>
             <div class="form-group">
                 <label class="control-label">Teacher</label>

@@ -35,17 +35,16 @@
     </span>
     <a load="/Subject">Back to List</a>
 </div>
-
+<!-- 
 <div id="piechart" style="width: 800px; height: 500px;"></div>
 
-
-<!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load('current', { 'packages': ['corechart'] });
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
         var jsonData = '@Html.Raw(@Model.Data)';
-        var data = new google.visualization.DataTable(jsonData);
+        var data = new google.visualization.DataTable('{"cols": [{"type": "string" ,"id": "task" ,"label": "Task" }, {"type": "number" ,"id": "hours" ,"label": "Hours per Day" }], "rows" : [{"c" : [{"v": "Failed"}, {"v": 2}]}]}');
         
         var options = {
             title: 'Passed students',

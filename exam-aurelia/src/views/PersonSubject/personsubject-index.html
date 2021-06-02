@@ -44,12 +44,12 @@
             </td>
 
             <td>
-<!--                 @if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
-                {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Evaluate student</a>@:|
-                } -->
-                <a load="/PersonSubject/${item.id}" >Details</a>
-<!--               |   <a asp-action="Delete" asp-route-id="@item.Id">Remove</a> -->
+
+                <a if.bind="appState.role == 'Admin' || appState.role == 'Teacher'" load="/PersonSubject/Edit/${item.id}/true">
+                        Evaluate student |
+                </a>
+                <a load="/PersonSubject/${item.id}" >Details</a>|
+                <a click.delegate="delete($event, item.id)" >Remove</a>
             </td>
         </tr>
 

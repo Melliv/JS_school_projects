@@ -1,7 +1,12 @@
 <import from="../../components/loader" />
 <import from="../../components/alert" />
 
-<h1>Create</h1>
+<h1 if.bind="edit" >
+    Edit
+</h1>
+<h1 if.bind="!edit" >
+    Create
+</h1>
 
 <h4>Person Homework</h4>
 <hr />
@@ -12,12 +17,12 @@
             <alert value.bind="errors.generalError"/>
             <div class="form-group">
                 <label class="control-label">Grade</label>
-                <input value.bind="personHomework.grade" class="form-control" />
+                <input value.bind="personHomework.grade" type="number" class="form-control" />
                 <alert value.bind="errors.grade"/>
             </div>
             <div class="form-group">
                 <label class="control-label">Points</label>
-                <input value.bind="personHomework.points" class="form-control" />
+                <input value.bind="personHomework.points" type="number" class="form-control" />
                 <alert value.bind="errors.points"/>
             </div>
             <div class="form-group">

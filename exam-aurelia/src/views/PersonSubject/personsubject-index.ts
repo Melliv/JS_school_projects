@@ -14,15 +14,19 @@ export class PersonSubjectIndex {
 
     constructor(
         @IRouter private router: IRouter,
-        protected httpClient: HttpClient, 
-        private appState: AppState){
+        protected httpClient: HttpClient,
+        private appState: AppState) {
     }
 
     async attached() {
+        if (this.appState.role == "") {
+            await this.router.load("/home");
+        }
+
         const result = await BaseService.getAll<PersonSubject>("/PersonSubject", this.appState.token);
 
         if (result.ok && result.data) {
-            
+
             this.pageLoader = { pageStatus: EPageStatus.OK, statusCode: 0 };
 
             this.personSubjects = result.data;
@@ -32,15 +36,15 @@ export class PersonSubjectIndex {
 
     }
 
-/*     async delete(event: Event, id: string) {
+    async delete(event: Event, id: string) {
         event.preventDefault();
         event.stopPropagation();
-        
-        const result = await BaseService.delete<Subject>("/Subject/" + id, this.appState.token);
+
+        const result = await BaseService.delete<PersonSubject>("/PersonSubject/" + id, this.appState.token);
         if (result.ok) {
             await this.attached();
         } else {
             this.pageLoader = { pageStatus: EPageStatus.CantDelete, statusCode: result.statusCode };
         }
-    } */
+    }
 }

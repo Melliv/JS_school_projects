@@ -43,10 +43,10 @@
             </td>
 
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a load="/PersonHomework/${item.id}">Details</a>
                 <span if.bind="appState.role == 'Admin' || appState.role == 'Teacher'">
                     |
-                    <a load="/Homework/Edit/${item.id}">Edit</a> |
+                    <a load="/PersonHomework/Edit/${item.id}">Edit</a> |
                     <a click.delegate="delete($event, item.id)">Remove</a>
                 </span>
             </td>

@@ -1,0 +1,52 @@
+
+<import from="../../components/loader" />
+
+<h1>Persons</h1>
+
+<p if.bind="appState.role == 'Admin'">
+    <a load="/Person/Create">Create New</a>
+</p>
+
+<table class="table table-bordered">
+    <loader value.bind="pageLoader" />
+    <thead>
+    <tr>
+        <th>
+            First name
+        </th>
+        <th>
+            Last name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Phone
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr repeat.for="item of persons">
+            <td>
+                ${ item.firstName }
+            </td>
+            <td>
+                ${ item.lastName }
+            </td>
+            <td>
+                ${ item.email }
+            </td>
+            <td>
+                ${ item.phoneNumber }
+            </td>
+            <td>
+                <span if.bind="appState.role == 'Admin'">
+                    |
+                    <a click.delegate="delete($event, item.id)">Remove</a>
+                </span>
+            </td>
+        </tr>
+
+    </tbody>
+</table>
