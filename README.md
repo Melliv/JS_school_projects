@@ -1,4 +1,9 @@
-# icd0006-2020s
+# Javascript projects
 
-Villem Madisson
-IADB 185765
+School project(icd0006). There are actually multiple projects, including 3 another project(blood donate system) clients.
+
+- js
+- ts
+- aurelia
+- vue
+- react
